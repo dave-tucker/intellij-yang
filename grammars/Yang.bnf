@@ -1,0 +1,304 @@
+{
+  parserClass="org.intellij.yang.parser.YangParser"
+
+  extends="com.intellij.extapi.psi.ASTWrapperPsiElement"
+
+  psiClassPrefix="Yang"
+  psiImplClassSuffix="Impl"
+  psiPackage="org.intellij.yang.psi"
+  psiImplPackage="org.intellij.yang.psi.impl"
+
+  elementTypeHolderClass="org.intellij.yang.psi.YangTypes"
+  elementTypePrefix="YANG_"
+  elementTypeClass="org.intellij.yang.psi.YangElementType"
+  tokenTypeClass="org.intellij.yang.psi.YangTokenType"
+
+  tokens = [
+  //reserved words
+  ANYXML       = "anyxml"
+  ARGUMENT     = "argument"
+  AUGMENT      = "augment"
+  BASE         = "base"
+  BELONGS_TO   = "belongs-to"
+  BIT          = "bit"
+  CASE         = "case"
+  CHOICE       = "choice"
+  CONFIG       = "config"
+  CONTACT      = "contact"
+  CONTAINER    = "container"
+  DEFAULT      = "default"
+  DESCRIPTION  = "description"
+  ENUM         = "enum"
+  ERROR_APP_TAG  = "error-app_tag"
+  ERROR_MESSAGE  = "error-message"
+  EXTENSION    = "extension"
+  DEVIATION    = "deviation"
+  DEVIATE      = "deviate"
+  FEATURE      = "feature"
+  FRACTION_DIGITS  = "fraction-digits"
+  GROUPING     = "grouping"
+  IDENTITY     = "identity"
+  IF_FEATURE   = "if-feature"
+  IMPORT       = "import"
+  INCLUDE      = "include"
+  INPUT        = "input"
+  KEY          = "key"
+  LEAF         = "leaf"
+  LEAF_LIST    = "leaf-list"
+  LENGTH       = "length"
+  LIST         = "list"
+  MANDATORY    = "mandatory"
+  MAX_ELEMENTS  = "max-elements"
+  MIN_ELEMENTS  = "min-elements"
+  MODULE       = "module"
+  MUST         = "must"
+  NAMESPACE    = "namespace"
+  NOTIFICATION = "notification"
+  ORDERED_BY   = "ordered-by"
+  ORGANIZATION = "organization"
+  OUTPUT       = "output"
+  PATH         = "path"
+  PATTERN      = "pattern"
+  POSITION     = "position"
+  PREFIX       = "prefix"
+  PRESENCE     = "presence"
+  RANGE        = "range"
+  REFERENCE    = "reference"
+  REFINE       = "refine"
+  REQUIRE_INSTANCE  = "require-instance"
+  REVISION     = "revision"
+  REVISION_DATE  = "revision-date"
+  RPC          = "rpc"
+  STATUS       = "status"
+  SUBMODULE    = "submodule"
+  TYPE         = "type"
+  TYPEDEF      = "typedef"
+  UNIQUE       = "unique"
+  UNITS        = "units"
+  USES         = "uses"
+  VALUE        = "value"
+  WHEN         = "when"
+  YANG_VERSION = "yang-version"
+  YIN_ELEMENT  = "yin-element"
+
+  // other keywords
+
+  ADD          = "add"
+  CURRENT      = "current"
+  DELETE       = "delete"
+  DEPRECATED   = "deprecated"
+  FALSE        = "false"
+  MAX          = "max"
+  MIN          = "min"
+  NOT_SUPPORTED  = "not_supported"
+  OBSOLETE     = "obsolete"
+  REPLACE      = "replace"
+  SYSTEM       = "system"
+  TRUE         = "true"
+  UNBOUNDED    = "unbounded"
+  USER         = "user"
+
+  PLUS = "+"
+  LEFT_BRACE = "{"
+  RIGHT_BRACE = "}"
+  SEMICOLON = ";"
+
+  ]
+}
+
+
+yang ::= module_stmt | submodule_stmt
+identifier_stmt ::= IDENTIFIER [STRING]
+stmtend ::= SEMICOLON [identifier_stmt] | (LEFT_BRACE [identifier_stmt] RIGHT_BRACE);
+
+module_stmt ::=  MODULE STRING LEFT_BRACE module_header_stmts linkage_stmts meta_stmts revision_stmts body_stmts RIGHT_BRACE
+
+submodule_stmt ::=  SUBMODULE STRING LEFT_BRACE submodule_header_stmts linkage_stmts meta_stmts revision_stmts body_stmts RIGHT_BRACE
+
+private module_header_stmts ::= [ yang_version_stmt ] namespace_stmt prefix_stmt
+
+private  submodule_header_stmts ::= [ yang_version_stmt ] belongs_to_stmt
+
+private meta_stmts ::=  [organization_stmt ] [contact_stmt ] [description_stmt ] [reference_stmt]
+
+private  linkage_stmts ::= (import_stmt)+ (include_stmt)+
+
+private revision_stmts ::= (revision_stmt)+
+
+private body_stmts ::= (extension_stmt | feature_stmt | identity_stmt | typedef_stmt | grouping_stmt | data_def_stmt | augment_stmt | rpc_stmt | notification_stmt | deviation_stmt)+
+
+private data_def_stmt ::= container_stmt | leaf_stmt | leaf_list_stmt | list_stmt  | choice_stmt | anyxml_stmt | uses_stmt
+
+yang_version_stmt ::= YANG_VERSION STRING stmtend
+
+import_stmt ::= IMPORT STRING LEFT_BRACE  prefix_stmt [revision_date_stmt] RIGHT_BRACE
+
+include_stmt ::= INCLUDE STRING (SEMICOLON | LEFT_BRACE [revision_date_stmt] RIGHT_BRACE)
+
+namespace_stmt ::= NAMESPACE STRING stmtend
+
+prefix_stmt ::= PREFIX STRING stmtend
+
+belongs_to_stmt ::= BELONGS_TO STRING LEFT_BRACE prefix_stmt RIGHT_BRACE
+
+organization_stmt ::= ORGANIZATION STRING stmtend
+
+contact_stmt ::= CONTACT STRING stmtend
+
+description_stmt ::= DESCRIPTION STRING stmtend
+
+reference_stmt ::= REFERENCE  STRING stmtend
+
+units_stmt ::= UNITS STRING stmtend
+
+revision_stmt ::= REVISION STRING (SEMICOLON | LEFT_BRACE [description_stmt] [reference_stmt] RIGHT_BRACE)
+
+revision_date_stmt ::= REVISION_DATE STRING stmtend
+
+extension_stmt ::= EXTENSION STRING ( SEMICOLON | LEFT_BRACE [argument_stmt] [status_stmt] [description_stmt] [reference_stmt] RIGHT_BRACE )
+
+argument_stmt ::= ARGUMENT STRING ( SEMICOLON | LEFT_BRACE [yin_element_arg] RIGHT_BRACE )
+
+private yin_element_arg ::= STRING //True or False
+
+yin_element_stmt ::= YIN_ELEMENT yin_element_arg stmtend
+
+identity_stmt  ::= IDENTITY STRING ( SEMICOLON | LEFT_BRACE [base_stmt] [status_stmt] [description_stmt] [reference_stmt] RIGHT_BRACE )
+
+base_stmt ::= BASE STRING stmtend
+
+feature_stmt ::= FEATURE STRING (SEMICOLON | LEFT_BRACE (if_feature_stmt+) [status_stmt] [description_stmt] [reference_stmt] RIGHT_BRACE)
+
+if_feature_stmt ::= IF_FEATURE STRING stmtend
+
+typedef_stmt ::= TYPEDEF STRING LEFT_BRACE type_stmt [units_stmt] [default_stmt] [status_stmt] [description_stmt] [reference_stmt] RIGHT_BRACE
+
+type_stmt ::= TYPE STRING ( SEMICOLON | RIGHT_BRACE type_body_stmts RIGHT_BRACE )
+
+private type_body_stmts ::= numerical_restrictions | decimal64_specification | STRING_restrictions | enum_specification | leafref_specification | identityref_specification | instance_identifier_specification | bits_specification | union_specification | binary_specification
+
+private binary_specification ::= [length_stmt]
+
+private numerical_restrictions ::= range_stmt
+
+range_stmt ::= RANGE STRING (SEMICOLON | LEFT_BRACE [error_message_stmt] [error_app_tag_stmt] [description_stmt] [reference_stmt] RIGHT_BRACE)
+
+private decimal64_specification  ::= fraction_digits_stmt [range_stmt]
+
+fraction_digits_stmt  ::= FRACTION_DIGITS STRING stmtend
+
+private STRING_restrictions  ::= [length_stmt] (pattern_stmt)+
+
+length_stmt ::= LENGTH STRING (SEMICOLON | LEFT_BRACE [error_message_stmt] [error_app_tag_stmt] [description_stmt] [reference_stmt] RIGHT_BRACE)
+
+pattern_stmt ::= PATTERN STRING (SEMICOLON | LEFT_BRACE [error_message_stmt] [error_app_tag_stmt] [description_stmt] [reference_stmt] RIGHT_BRACE)
+
+default_stmt ::= DEFAULT STRING stmtend
+
+private enum_specification ::= (enum_stmt)+
+
+enum_stmt ::= ENUM STRING (SEMICOLON | LEFT_BRACE [value_stmt] [status_stmt] [description_stmt] [reference_stmt] RIGHT_BRACE)
+
+private leafref_specification  ::= path_stmt
+
+path_stmt ::= PATH STRING stmtend
+
+require_instance_stmt ::= REQUIRE_INSTANCE STRING stmtend
+
+private instance_identifier_specification ::= [require_instance_stmt]
+
+private identityref_specification ::= base_stmt
+
+private union_specification ::= (type_stmt)*
+
+private bits_specification ::= (bit_stmt)*
+
+bit_stmt ::= BIT STRING (SEMICOLON | LEFT_BRACE [position_stmt] [status_stmt] [description_stmt] [reference_stmt] RIGHT_BRACE)
+
+position_stmt ::= POSITION STRING stmtend
+
+status_stmt ::= STATUS STRING stmtend
+
+config_stmt ::= CONFIG STRING stmtend
+
+mandatory_stmt ::= MANDATORY STRING stmtend
+
+presence_stmt ::= PRESENCE STRING stmtend
+
+ordered_by_stmt ::= ORDERED_BY STRING stmtend
+
+must_stmt ::= MUST STRING (SEMICOLON | LEFT_BRACE [error_message_stmt] [error_app_tag_stmt] [description_stmt] [reference_stmt] RIGHT_BRACE)
+
+error_message_stmt ::= ERROR_MESSAGE STRING stmtend
+
+error_app_tag_stmt ::= ERROR_APP_TAG STRING stmtend
+
+min_elements_stmt ::= MIN_ELEMENTS STRING stmtend
+
+max_elements_stmt ::= MAX_ELEMENTS STRING stmtend
+
+value_stmt ::= VALUE STRING stmtend
+
+grouping_stmt ::= GROUPING STRING (SEMICOLON | LEFT_BRACE [status_stmt] [description_stmt] [reference_stmt] (typedef_stmt | grouping_stmt)+ (data_def_stmt)+ RIGHT_BRACE)
+
+container_stmt ::= CONTAINER STRING (SEMICOLON | LEFT_BRACE [when_stmt] (if_feature_stmt)+ (must_stmt)+ [presence_stmt] [config_stmt] [status_stmt] [description_stmt] [reference_stmt] (typedef_stmt | grouping_stmt)+ (data_def_stmt)+ RIGHT_BRACE)
+
+leaf_stmt ::= LEAF STRING LEFT_BRACE [when_stmt] (if_feature_stmt)+ type_stmt [units_stmt] (must_stmt)+ [default_stmt] [config_stmt] [mandatory_stmt] [status_stmt] [description_stmt] [reference_stmt] RIGHT_BRACE
+
+leaf_list_stmt ::= LEAF_LIST STRING LEFT_BRACE [when_stmt] (if_feature_stmt)+ type_stmt [units_stmt] (must_stmt)+ [config_stmt] [min_elements_stmt] [max_elements_stmt] [ordered_by_stmt] [status_stmt] [description_stmt] [reference_stmt] RIGHT_BRACE
+
+list_stmt ::= LIST STRING LEFT_BRACE [when_stmt] (if_feature_stmt)+ type_stmt [units_stmt] (must_stmt)+ [config_stmt] [min_elements_stmt] [max_elements_stmt] [ordered_by_stmt] [status_stmt] [description_stmt] [reference_stmt] (typedef_stmt | grouping_stmt)+ (data_def_stmt)* RIGHT_BRACE
+
+key_stmt ::= KEY STRING stmtend
+
+unique_stmt ::= UNIQUE STRING stmtend
+
+choice_stmt ::= CHOICE STRING (SEMICOLON | LEFT_BRACE [when_stmt] (if_feature_stmt)+ [default_stmt] [config_stmt] [mandatory_stmt] [status_stmt] [description_stmt] [reference_stmt] (short_case_stmt | case_stmt)+ RIGHT_BRACE)
+
+private short_case_stmt ::= container_stmt | leaf_stmt | leaf_list_stmt | list_stmt | anyxml_stmt
+
+case_stmt ::= CASE STRING (SEMICOLON | LEFT_BRACE [when_stmt] (if_feature_stmt)+ [status_stmt] [description_stmt] [reference_stmt] (data_def_stmt)+ RIGHT_BRACE)
+
+anyxml_stmt ::= ANYXML STRING (SEMICOLON | LEFT_BRACE [when_stmt] (if_feature_stmt)+ (must_stmt)+ [config_stmt] [mandatory_stmt] [status_stmt] [description_stmt] [reference_stmt] RIGHT_BRACE)
+
+uses_stmt ::= USES STRING (SEMICOLON | LEFT_BRACE [when_stmt] (if_feature_stmt)+ [status_stmt] [description_stmt] [reference_stmt] (refine_stmt)+ (uses_augment_stmt)+ RIGHT_BRACE)
+
+refine_stmt ::= REFINE STRING (SEMICOLON | LEFT_BRACE (refine_container_stmts | refine_leaf_stmts | refine_leaf_list_stmts | refine_list_stmts | refine_choice_stmts | refine_case_stmts | refine_anyxml_stmts) RIGHT_BRACE)
+
+private refine_container_stmts ::= (must_stmt)+ [presence_stmt] [config_stmt] [description_stmt] [reference_stmt]
+
+private refine_leaf_stmts ::= (must_stmt)+ [default_stmt] [config_stmt] [mandatory_stmt] [description_stmt] [reference_stmt]
+
+private refine_leaf_list_stmts ::= (must_stmt)+ [config_stmt] [min_elements_stmt] [max_elements_stmt] [description_stmt] [reference_stmt]
+
+private refine_list_stmts ::= (must_stmt)+ [config_stmt] [min_elements_stmt] [max_elements_stmt] [description_stmt] [reference_stmt]
+
+private refine_choice_stmts ::= [default_stmt] [config_stmt] [mandatory_stmt] [description_stmt] [reference_stmt]
+
+private refine_case_stmts ::= [description_stmt] [reference_stmt]
+
+private refine_anyxml_stmts  ::= (must_stmt)+ [config_stmt] [mandatory_stmt] [description_stmt] [reference_stmt]
+
+uses_augment_stmt ::= AUGMENT STRING LEFT_BRACE [when_stmt] (if_feature_stmt)+ [status_stmt] [description_stmt] [reference_stmt] ((data_def_stmt)+ | (case_stmt))* RIGHT_BRACE
+
+augment_stmt ::= AUGMENT STRING LEFT_BRACE [when_stmt] (if_feature_stmt)+ [status_stmt] [description_stmt] [reference_stmt] ((data_def_stmt)+ | (case_stmt))* RIGHT_BRACE
+
+when_stmt ::= WHEN STRING (SEMICOLON | LEFT_BRACE [description_stmt] [reference_stmt] RIGHT_BRACE)
+
+rpc_stmt ::= RPC STRING (SEMICOLON | LEFT_BRACE (if_feature_stmt)+ [status_stmt] [description_stmt] [reference_stmt] (typedef_stmt | grouping_stmt)+ [input_stmt] [output_stmt] RIGHT_BRACE)
+
+input_stmt ::= INPUT LEFT_BRACE (typedef_stmt | grouping_stmt)+ (data_def_stmt)* RIGHT_BRACE
+
+output_stmt ::= OUTPUT LEFT_BRACE (typedef_stmt | grouping_stmt)+ (data_def_stmt)* RIGHT_BRACE
+
+notification_stmt ::= NOTIFICATION STRING (SEMICOLON | LEFT_BRACE (if_feature_stmt)+ [status_stmt] [description_stmt] [reference_stmt] (typedef_stmt | grouping_stmt)+ (data_def_stmt)+ RIGHT_BRACE)
+
+deviation_stmt ::= DEVIATION STRING LEFT_BRACE [description_stmt] [reference_stmt] (deviate_not_supported_stmt | (deviate_add_stmt | deviate_replace_stmt | deviate_delete_stmt))+ RIGHT_BRACE
+
+deviate_not_supported_stmt ::= DEVIATE NOT_SUPPORTED (SEMICOLON | LEFT_BRACE RIGHT_BRACE)
+
+deviate_add_stmt ::= DEVIATE ADD (SEMICOLON | LEFT_BRACE [units_stmt] (must_stmt)+ (unique_stmt)+ [default_stmt] [config_stmt] [mandatory_stmt] [min_elements_stmt] [max_elements_stmt] RIGHT_BRACE)
+
+deviate_delete_stmt ::= DEVIATE DELETE (SEMICOLON | LEFT_BRACE [units_stmt] (must_stmt)+ (unique_stmt)+ [default_stmt] RIGHT_BRACE)
+
+deviate_replace_stmt ::= DEVIATE REPLACE (SEMICOLON | LEFT_BRACE [type_stmt] [units_stmt] [default_stmt] [config_stmt] [mandatory_stmt] [min_elements_stmt] [max_elements_stmt] RIGHT_BRACE)

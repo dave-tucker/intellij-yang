@@ -1,0 +1,43 @@
+<idea-plugin version="2">
+  <id>org.intellij.yang</id>
+  <name>Yang Language Plugin</name>
+  <version>1.0</version>
+  <vendor email="dave@dtucker.co.uk" url="http://dtucker.co.uk">Dave Tucker</vendor>
+
+  <description><![CDATA[
+      This plugin adds support for Yang to IntelliJ
+    ]]></description>
+
+  <change-notes><![CDATA[
+      Nothing to report
+    ]]>
+  </change-notes>
+
+  <!-- please see http://confluence.jetbrains.com/display/IDEADEV/Build+Number+Ranges for description -->
+  <idea-version since-build="131"/>
+
+  <!-- please see http://confluence.jetbrains.com/display/IDEADEV/Plugin+Compatibility+with+IntelliJ+Platform+Products
+       on how to target different products -->
+  <!-- uncomment to enable plugin in all products
+  <depends>com.intellij.modules.lang</depends>
+  -->
+
+  <extensions defaultExtensionNs="com.intellij">
+      <fileTypeFactory implementation="org.intellij.yang.YangFileTypeFactory"/>
+      <lang.parserDefinition language="Yang" implementationClass="org.intellij.yang.YangParserDefinition"/>
+  </extensions>
+
+  <application-components>
+    <!-- Add your application components here -->
+  </application-components>
+
+  <project-components>
+    <!-- Add your project components here -->
+  </project-components>
+
+  <actions>
+    <!-- Add your actions here -->
+  </actions>
+
+
+</idea-plugin>
