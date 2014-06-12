@@ -35,6 +35,9 @@ public interface YangLeafListStmt extends PsiElement {
   YangStatusStmt getStatusStmt();
 
   @NotNull
+  YangStringStmt getStringStmt();
+
+  @NotNull
   YangTypeStmt getTypeStmt();
 
   @Nullable

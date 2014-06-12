@@ -41,6 +41,9 @@ public interface YangUsesAugmentStmt extends PsiElement {
   YangStatusStmt getStatusStmt();
 
   @NotNull
+  YangStringStmt getStringStmt();
+
+  @NotNull
   List<YangUsesStmt> getUsesStmtList();
 
   @Nullable

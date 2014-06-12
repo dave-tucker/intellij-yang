@@ -19,4 +19,7 @@ public interface YangFeatureStmt extends PsiElement {
   @Nullable
   YangStatusStmt getStatusStmt();
 
+  @NotNull
+  YangStringStmt getStringStmt();
+
 }

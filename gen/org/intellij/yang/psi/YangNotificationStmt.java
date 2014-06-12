@@ -41,6 +41,9 @@ public interface YangNotificationStmt extends PsiElement {
   YangStatusStmt getStatusStmt();
 
   @NotNull
+  YangStringStmt getStringStmt();
+
+  @NotNull
   List<YangTypedefStmt> getTypedefStmtList();
 
   @NotNull

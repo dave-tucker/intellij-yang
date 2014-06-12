@@ -34,4 +34,7 @@ public interface YangRefineStmt extends PsiElement {
   @Nullable
   YangReferenceStmt getReferenceStmt();
 
+  @NotNull
+  YangStringStmt getStringStmt();
+
 }

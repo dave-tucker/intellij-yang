@@ -25,4 +25,7 @@ public interface YangDeviationStmt extends PsiElement {
   @Nullable
   YangReferenceStmt getReferenceStmt();
 
+  @NotNull
+  YangStringStmt getStringStmt();
+
 }

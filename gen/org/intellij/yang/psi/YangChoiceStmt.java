@@ -46,6 +46,9 @@ public interface YangChoiceStmt extends PsiElement {
   @Nullable
   YangStatusStmt getStatusStmt();
 
+  @NotNull
+  YangStringStmt getStringStmt();
+
   @Nullable
   YangWhenStmt getWhenStmt();
 

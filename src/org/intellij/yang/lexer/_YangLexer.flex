@@ -1,5 +1,5 @@
 package org.intellij.yang.lexer;
-import com.intellij.lexer.*;
+import com.intellij.lexer.FlexLexer;
 import com.intellij.psi.tree.IElementType;
 import static org.intellij.yang.psi.YangTypes.*;
 import static org.intellij.yang.psi.YangTokenTypeSets.*;
@@ -19,30 +19,36 @@ import static org.intellij.yang.psi.YangTokenTypeSets.*;
 %type IElementType
 %unicode
 
-EOL="\r"|"\n"|"\r\n"
-LINE_WS=[\ \t\f]
-InputCharacter = [^\r\n]
-WHITE_SPACE=({LINE_WS}|{EOL})+
-IDENTIFIER=[/.a-zA-Z_0-9\-][a-zA-Z0-9_\-.:]*
-ESC = "\\"([\"\\/bfnrt]|{UNICODE})
-UNICODE ='u'{HEX}{HEX}{HEX}{HEX}
-HEX = [0-9a-fA-F]
-SUB_STRING = (\"({ESC}|~[\"])*\")|(\'({ESC}|~[\'])*')
-STRING = ({SUB_STRING}|(~(\r|\n|\ |;|\{)+))
 
-YANG_COMMENT = {TraditionalComment} | {EndOfLineComment} | {DocumentationComment}
+LineTerminator = \r|\n|\r\n
+InputCharacter = [^\r\n]
+WhiteSpace = {LineTerminator} | [ \t\f]
+
+Comment = {TraditionalComment} | {EndOfLineComment} | {DocumentationComment}
 TraditionalComment   = "/*" [^*] ~"*/" | "/*" "*"+ "/"
-EndOfLineComment     = "//" {InputCharacter}* {EOL}
+EndOfLineComment     = "//" {InputCharacter}* {LineTerminator}
 DocumentationComment = "/**" {CommentContent} "*"+ "/"
 CommentContent       = ( [^*] | \*+ [^/*] )*
 
+/* integer literals */
+DecIntegerLiteral = [\+\-]0 | [\+\-][1-9][0-9]*
+HexIntegerLiteral = [\+\-]0x[0-9a-fA-F]*
+OctIntegerLiteral = [\+\-]0[0-7]*
+
+/* Without the \\\" at the start the lexer won't find it, for unknown reasons */
+ESC = "\\" ( [^] )
+CHAR = {ESC} | [^\'\"\\]
+STRING_BAD1 = \" ({CHAR} | \') *
+StringLiteral = {STRING_BAD1} \"
+
+Identifier = [/.a-zA-Z_0-9\-][a-zA-Z0-9_\-.:]*
+
 %%
 <YYINITIAL> {
-  {YANG_COMMENT}          { return COMMENT; }
-  {WHITE_SPACE}           { return com.intellij.psi.TokenType.WHITE_SPACE; }
-  \{                      { return YANG_LEFT_BRACE; }
-  \}                      { return YANG_RIGHT_BRACE; }
-
+  ";"                     { return YANG_SEMICOLON; }
+  "+"                     { return YANG_PLUS; }
+  "{"                     { return YANG_LEFT_BRACE; }
+  "}"                     { return YANG_RIGHT_BRACE; }
   "anyxml"                { return YANG_ANYXML; }
   "argument"              { return YANG_ARGUMENT; }
   "augment"               { return YANG_AUGMENT; }
@@ -109,25 +115,27 @@ CommentContent       = ( [^*] | \*+ [^/*] )*
   "yang-version"          { return YANG_YANG_VERSION; }
   "yin-element"           { return YANG_YIN_ELEMENT; }
   "add"                   { return YANG_ADD; }
-  "current"               { return YANG_CURRENT; }
+  //"current"               { return YANG_CURRENT; }
   "delete"                { return YANG_DELETE; }
-  "deprecated"            { return YANG_DEPRECATED; }
-  "false"                 { return YANG_FALSE; }
-  "max"                   { return YANG_MAX; }
-  "min"                   { return YANG_MIN; }
-  "not_supported"         { return YANG_NOT_SUPPORTED; }
-  "obsolete"              { return YANG_OBSOLETE; }
+  //"deprecated"            { return YANG_DEPRECATED; }
+  //"false"                 { return YANG_FALSE; }
+  //"max"                   { return YANG_MAX; }
+  //"min"                   { return YANG_MIN; }
+  //"not_supported"         { return YANG_NOT_SUPPORTED; }
+  //"obsolete"              { return YANG_OBSOLETE; }
   "replace"               { return YANG_REPLACE; }
-  "system"                { return YANG_SYSTEM; }
-  "true"                  { return YANG_TRUE; }
-  "unbounded"             { return YANG_UNBOUNDED; }
-  "user"                  { return YANG_USER; }
+  //"system"                { return YANG_SYSTEM; }
+  //"true"                  { return YANG_TRUE; }
+  //"unbounded"             { return YANG_UNBOUNDED; }
+  //"user"                  { return YANG_USER; }
 
-  "+"                     { return YANG_PLUS; }
-  ";"                     { return YANG_SEMICOLON; }
-  {IDENTIFIER}            { return YANG_IDENTIFIER; }
-  (\"|\'){STRING}(\"\')   { return YANG_STRING; }
+  /* string literal */
+  {StringLiteral}         { return YANG_STRING; }
 
+  {Identifier}            { return YANG_STRING; }
 
-  [^] { return com.intellij.psi.TokenType.BAD_CHARACTER; }
+  {Comment}               { return YANG_COMMENT; }
+  {WhiteSpace}+           { return com.intellij.psi.TokenType.WHITE_SPACE; }
+
+[^] { return com.intellij.psi.TokenType.BAD_CHARACTER; }
 }

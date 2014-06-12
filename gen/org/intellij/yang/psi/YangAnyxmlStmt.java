@@ -28,6 +28,9 @@ public interface YangAnyxmlStmt extends PsiElement {
   @Nullable
   YangStatusStmt getStatusStmt();
 
+  @NotNull
+  YangStringStmt getStringStmt();
+
   @Nullable
   YangWhenStmt getWhenStmt();
 

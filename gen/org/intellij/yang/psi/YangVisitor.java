@@ -39,6 +39,10 @@ public class YangVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
+  public void visitCommentStmt(@NotNull YangCommentStmt o) {
+    visitPsiElement(o);
+  }
+
   public void visitConfigStmt(@NotNull YangConfigStmt o) {
     visitPsiElement(o);
   }
@@ -244,6 +248,10 @@ public class YangVisitor extends PsiElementVisitor {
   }
 
   public void visitStmtend(@NotNull YangStmtend o) {
+    visitPsiElement(o);
+  }
+
+  public void visitStringStmt(@NotNull YangStringStmt o) {
     visitPsiElement(o);
   }
 

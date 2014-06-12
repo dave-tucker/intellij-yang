@@ -35,6 +35,9 @@ public interface YangTypeStmt extends PsiElement {
   YangRequireInstanceStmt getRequireInstanceStmt();
 
   @NotNull
+  YangStringStmt getStringStmt();
+
+  @NotNull
   List<YangTypeStmt> getTypeStmtList();
 
 }

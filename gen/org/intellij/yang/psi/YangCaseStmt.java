@@ -38,6 +38,9 @@ public interface YangCaseStmt extends PsiElement {
   YangStatusStmt getStatusStmt();
 
   @NotNull
+  YangStringStmt getStringStmt();
+
+  @NotNull
   List<YangUsesStmt> getUsesStmtList();
 
   @Nullable

@@ -8,6 +8,7 @@ import static org.intellij.yang.psi.YangTypes.*;
 import static com.intellij.lang.parser.GeneratedParserUtilBase.*;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.lang.ASTNode;
+import com.intellij.psi.tree.TokenSet;
 import com.intellij.lang.PsiParser;
 
 @SuppressWarnings({"SimplifiableIfStatement", "UnusedAssignment"})
@@ -42,6 +43,9 @@ public class YangParser implements PsiParser {
     }
     else if (root_ == YANG_CHOICE_STMT) {
       result_ = choice_stmt(builder_, 0);
+    }
+    else if (root_ == YANG_COMMENT_STMT) {
+      result_ = comment_stmt(builder_, 0);
     }
     else if (root_ == YANG_CONFIG_STMT) {
       result_ = config_stmt(builder_, 0);
@@ -199,6 +203,9 @@ public class YangParser implements PsiParser {
     else if (root_ == YANG_STMTEND) {
       result_ = stmtend(builder_, 0);
     }
+    else if (root_ == YANG_STRING_STMT) {
+      result_ = string_stmt(builder_, 0);
+    }
     else if (root_ == YANG_SUBMODULE_STMT) {
       result_ = submodule_stmt(builder_, 0);
     }
@@ -240,63 +247,31 @@ public class YangParser implements PsiParser {
   }
 
   protected boolean parse_root_(final IElementType root_, final PsiBuilder builder_, final int level_) {
-    return yang(builder_, level_ + 1);
+    return YangFile(builder_, level_ + 1);
   }
 
   /* ********************************************************** */
-  // [length_stmt] (pattern_stmt)+
-  static boolean STRING_restrictions(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "STRING_restrictions")) return false;
-    if (!nextTokenIs(builder_, "", YANG_LENGTH, YANG_PATTERN)) return false;
+  // module_stmt | submodule_stmt
+  static boolean YangFile(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "YangFile")) return false;
+    if (!nextTokenIs(builder_, "", YANG_MODULE, YANG_SUBMODULE)) return false;
     boolean result_ = false;
     Marker marker_ = enter_section_(builder_);
-    result_ = STRING_restrictions_0(builder_, level_ + 1);
-    result_ = result_ && STRING_restrictions_1(builder_, level_ + 1);
-    exit_section_(builder_, marker_, null, result_);
-    return result_;
-  }
-
-  // [length_stmt]
-  private static boolean STRING_restrictions_0(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "STRING_restrictions_0")) return false;
-    length_stmt(builder_, level_ + 1);
-    return true;
-  }
-
-  // (pattern_stmt)+
-  private static boolean STRING_restrictions_1(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "STRING_restrictions_1")) return false;
-    boolean result_ = false;
-    Marker marker_ = enter_section_(builder_);
-    result_ = STRING_restrictions_1_0(builder_, level_ + 1);
-    int pos_ = current_position_(builder_);
-    while (result_) {
-      if (!STRING_restrictions_1_0(builder_, level_ + 1)) break;
-      if (!empty_element_parsed_guard_(builder_, "STRING_restrictions_1", pos_)) break;
-      pos_ = current_position_(builder_);
-    }
-    exit_section_(builder_, marker_, null, result_);
-    return result_;
-  }
-
-  // (pattern_stmt)
-  private static boolean STRING_restrictions_1_0(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "STRING_restrictions_1_0")) return false;
-    boolean result_ = false;
-    Marker marker_ = enter_section_(builder_);
-    result_ = pattern_stmt(builder_, level_ + 1);
+    result_ = module_stmt(builder_, level_ + 1);
+    if (!result_) result_ = submodule_stmt(builder_, level_ + 1);
     exit_section_(builder_, marker_, null, result_);
     return result_;
   }
 
   /* ********************************************************** */
-  // ANYXML STRING (SEMICOLON | LEFT_BRACE [when_stmt] (if_feature_stmt)+ (must_stmt)+ [config_stmt] [mandatory_stmt] [status_stmt] [description_stmt] [reference_stmt] RIGHT_BRACE)
+  // ANYXML string_stmt (SEMICOLON | LEFT_BRACE [when_stmt] (if_feature_stmt)+ (must_stmt)+ [config_stmt] [mandatory_stmt] [status_stmt] [description_stmt] [reference_stmt] RIGHT_BRACE)
   public static boolean anyxml_stmt(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "anyxml_stmt")) return false;
     if (!nextTokenIs(builder_, YANG_ANYXML)) return false;
     boolean result_ = false;
     Marker marker_ = enter_section_(builder_);
-    result_ = consumeTokens(builder_, 0, YANG_ANYXML, YANG_STRING);
+    result_ = consumeToken(builder_, YANG_ANYXML);
+    result_ = result_ && string_stmt(builder_, level_ + 1);
     result_ = result_ && anyxml_stmt_2(builder_, level_ + 1);
     exit_section_(builder_, marker_, YANG_ANYXML_STMT, result_);
     return result_;
@@ -427,13 +402,14 @@ public class YangParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // ARGUMENT STRING ( SEMICOLON | LEFT_BRACE [yin_element_arg] RIGHT_BRACE )
+  // ARGUMENT string_stmt ( SEMICOLON | LEFT_BRACE [yin_element_arg] RIGHT_BRACE )
   public static boolean argument_stmt(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "argument_stmt")) return false;
     if (!nextTokenIs(builder_, YANG_ARGUMENT)) return false;
     boolean result_ = false;
     Marker marker_ = enter_section_(builder_);
-    result_ = consumeTokens(builder_, 0, YANG_ARGUMENT, YANG_STRING);
+    result_ = consumeToken(builder_, YANG_ARGUMENT);
+    result_ = result_ && string_stmt(builder_, level_ + 1);
     result_ = result_ && argument_stmt_2(builder_, level_ + 1);
     exit_section_(builder_, marker_, YANG_ARGUMENT_STMT, result_);
     return result_;
@@ -470,13 +446,15 @@ public class YangParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // AUGMENT STRING LEFT_BRACE [when_stmt] (if_feature_stmt)+ [status_stmt] [description_stmt] [reference_stmt] ((data_def_stmt)+ | (case_stmt))* RIGHT_BRACE
+  // AUGMENT string_stmt LEFT_BRACE [when_stmt] (if_feature_stmt)+ [status_stmt] [description_stmt] [reference_stmt] ((data_def_stmt)+ | (case_stmt))* RIGHT_BRACE
   public static boolean augment_stmt(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "augment_stmt")) return false;
     if (!nextTokenIs(builder_, YANG_AUGMENT)) return false;
     boolean result_ = false;
     Marker marker_ = enter_section_(builder_);
-    result_ = consumeTokens(builder_, 0, YANG_AUGMENT, YANG_STRING, YANG_LEFT_BRACE);
+    result_ = consumeToken(builder_, YANG_AUGMENT);
+    result_ = result_ && string_stmt(builder_, level_ + 1);
+    result_ = result_ && consumeToken(builder_, YANG_LEFT_BRACE);
     result_ = result_ && augment_stmt_3(builder_, level_ + 1);
     result_ = result_ && augment_stmt_4(builder_, level_ + 1);
     result_ = result_ && augment_stmt_5(builder_, level_ + 1);
@@ -602,26 +580,29 @@ public class YangParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // BASE STRING stmtend
+  // BASE string_stmt stmtend
   public static boolean base_stmt(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "base_stmt")) return false;
     if (!nextTokenIs(builder_, YANG_BASE)) return false;
     boolean result_ = false;
     Marker marker_ = enter_section_(builder_);
-    result_ = consumeTokens(builder_, 0, YANG_BASE, YANG_STRING);
+    result_ = consumeToken(builder_, YANG_BASE);
+    result_ = result_ && string_stmt(builder_, level_ + 1);
     result_ = result_ && stmtend(builder_, level_ + 1);
     exit_section_(builder_, marker_, YANG_BASE_STMT, result_);
     return result_;
   }
 
   /* ********************************************************** */
-  // BELONGS_TO STRING LEFT_BRACE prefix_stmt RIGHT_BRACE
+  // BELONGS_TO string_stmt LEFT_BRACE prefix_stmt RIGHT_BRACE
   public static boolean belongs_to_stmt(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "belongs_to_stmt")) return false;
     if (!nextTokenIs(builder_, YANG_BELONGS_TO)) return false;
     boolean result_ = false;
     Marker marker_ = enter_section_(builder_);
-    result_ = consumeTokens(builder_, 0, YANG_BELONGS_TO, YANG_STRING, YANG_LEFT_BRACE);
+    result_ = consumeToken(builder_, YANG_BELONGS_TO);
+    result_ = result_ && string_stmt(builder_, level_ + 1);
+    result_ = result_ && consumeToken(builder_, YANG_LEFT_BRACE);
     result_ = result_ && prefix_stmt(builder_, level_ + 1);
     result_ = result_ && consumeToken(builder_, YANG_RIGHT_BRACE);
     exit_section_(builder_, marker_, YANG_BELONGS_TO_STMT, result_);
@@ -637,13 +618,14 @@ public class YangParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // BIT STRING (SEMICOLON | LEFT_BRACE [position_stmt] [status_stmt] [description_stmt] [reference_stmt] RIGHT_BRACE)
+  // BIT string_stmt (SEMICOLON | LEFT_BRACE [position_stmt] [status_stmt] [description_stmt] [reference_stmt] RIGHT_BRACE)
   public static boolean bit_stmt(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "bit_stmt")) return false;
     if (!nextTokenIs(builder_, YANG_BIT)) return false;
     boolean result_ = false;
     Marker marker_ = enter_section_(builder_);
-    result_ = consumeTokens(builder_, 0, YANG_BIT, YANG_STRING);
+    result_ = consumeToken(builder_, YANG_BIT);
+    result_ = result_ && string_stmt(builder_, level_ + 1);
     result_ = result_ && bit_stmt_2(builder_, level_ + 1);
     exit_section_(builder_, marker_, YANG_BIT_STMT, result_);
     return result_;
@@ -763,13 +745,14 @@ public class YangParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // CASE STRING (SEMICOLON | LEFT_BRACE [when_stmt] (if_feature_stmt)+ [status_stmt] [description_stmt] [reference_stmt] (data_def_stmt)+ RIGHT_BRACE)
+  // CASE string_stmt (SEMICOLON | LEFT_BRACE [when_stmt] (if_feature_stmt)+ [status_stmt] [description_stmt] [reference_stmt] (data_def_stmt)+ RIGHT_BRACE)
   public static boolean case_stmt(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "case_stmt")) return false;
     if (!nextTokenIs(builder_, YANG_CASE)) return false;
     boolean result_ = false;
     Marker marker_ = enter_section_(builder_);
-    result_ = consumeTokens(builder_, 0, YANG_CASE, YANG_STRING);
+    result_ = consumeToken(builder_, YANG_CASE);
+    result_ = result_ && string_stmt(builder_, level_ + 1);
     result_ = result_ && case_stmt_2(builder_, level_ + 1);
     exit_section_(builder_, marker_, YANG_CASE_STMT, result_);
     return result_;
@@ -884,13 +867,14 @@ public class YangParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // CHOICE STRING (SEMICOLON | LEFT_BRACE [when_stmt] (if_feature_stmt)+ [default_stmt] [config_stmt] [mandatory_stmt] [status_stmt] [description_stmt] [reference_stmt] (short_case_stmt | case_stmt)+ RIGHT_BRACE)
+  // CHOICE string_stmt (SEMICOLON | LEFT_BRACE [when_stmt] (if_feature_stmt)+ [default_stmt] [config_stmt] [mandatory_stmt] [status_stmt] [description_stmt] [reference_stmt] (short_case_stmt | case_stmt)+ RIGHT_BRACE)
   public static boolean choice_stmt(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "choice_stmt")) return false;
     if (!nextTokenIs(builder_, YANG_CHOICE)) return false;
     boolean result_ = false;
     Marker marker_ = enter_section_(builder_);
-    result_ = consumeTokens(builder_, 0, YANG_CHOICE, YANG_STRING);
+    result_ = consumeToken(builder_, YANG_CHOICE);
+    result_ = result_ && string_stmt(builder_, level_ + 1);
     result_ = result_ && choice_stmt_2(builder_, level_ + 1);
     exit_section_(builder_, marker_, YANG_CHOICE_STMT, result_);
     return result_;
@@ -1030,39 +1014,54 @@ public class YangParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // CONFIG STRING stmtend
+  // COMMENT
+  public static boolean comment_stmt(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "comment_stmt")) return false;
+    if (!nextTokenIs(builder_, YANG_COMMENT)) return false;
+    boolean result_ = false;
+    Marker marker_ = enter_section_(builder_);
+    result_ = consumeToken(builder_, YANG_COMMENT);
+    exit_section_(builder_, marker_, YANG_COMMENT_STMT, result_);
+    return result_;
+  }
+
+  /* ********************************************************** */
+  // CONFIG string_stmt stmtend
   public static boolean config_stmt(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "config_stmt")) return false;
     if (!nextTokenIs(builder_, YANG_CONFIG)) return false;
     boolean result_ = false;
     Marker marker_ = enter_section_(builder_);
-    result_ = consumeTokens(builder_, 0, YANG_CONFIG, YANG_STRING);
+    result_ = consumeToken(builder_, YANG_CONFIG);
+    result_ = result_ && string_stmt(builder_, level_ + 1);
     result_ = result_ && stmtend(builder_, level_ + 1);
     exit_section_(builder_, marker_, YANG_CONFIG_STMT, result_);
     return result_;
   }
 
   /* ********************************************************** */
-  // CONTACT STRING stmtend
+  // CONTACT string_stmt stmtend
   public static boolean contact_stmt(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "contact_stmt")) return false;
     if (!nextTokenIs(builder_, YANG_CONTACT)) return false;
     boolean result_ = false;
     Marker marker_ = enter_section_(builder_);
-    result_ = consumeTokens(builder_, 0, YANG_CONTACT, YANG_STRING);
+    result_ = consumeToken(builder_, YANG_CONTACT);
+    result_ = result_ && string_stmt(builder_, level_ + 1);
     result_ = result_ && stmtend(builder_, level_ + 1);
     exit_section_(builder_, marker_, YANG_CONTACT_STMT, result_);
     return result_;
   }
 
   /* ********************************************************** */
-  // CONTAINER STRING (SEMICOLON | LEFT_BRACE [when_stmt] (if_feature_stmt)+ (must_stmt)+ [presence_stmt] [config_stmt] [status_stmt] [description_stmt] [reference_stmt] (typedef_stmt | grouping_stmt)+ (data_def_stmt)+ RIGHT_BRACE)
+  // CONTAINER string_stmt (SEMICOLON | LEFT_BRACE [when_stmt] (if_feature_stmt)+ (must_stmt)+ [presence_stmt] [config_stmt] [status_stmt] [description_stmt] [reference_stmt] (typedef_stmt | grouping_stmt)+ (data_def_stmt)+ RIGHT_BRACE)
   public static boolean container_stmt(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "container_stmt")) return false;
     if (!nextTokenIs(builder_, YANG_CONTAINER)) return false;
     boolean result_ = false;
     Marker marker_ = enter_section_(builder_);
-    result_ = consumeTokens(builder_, 0, YANG_CONTAINER, YANG_STRING);
+    result_ = consumeToken(builder_, YANG_CONTAINER);
+    result_ = result_ && string_stmt(builder_, level_ + 1);
     result_ = result_ && container_stmt_2(builder_, level_ + 1);
     exit_section_(builder_, marker_, YANG_CONTAINER_STMT, result_);
     return result_;
@@ -1285,26 +1284,28 @@ public class YangParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // DEFAULT STRING stmtend
+  // DEFAULT string_stmt stmtend
   public static boolean default_stmt(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "default_stmt")) return false;
     if (!nextTokenIs(builder_, YANG_DEFAULT)) return false;
     boolean result_ = false;
     Marker marker_ = enter_section_(builder_);
-    result_ = consumeTokens(builder_, 0, YANG_DEFAULT, YANG_STRING);
+    result_ = consumeToken(builder_, YANG_DEFAULT);
+    result_ = result_ && string_stmt(builder_, level_ + 1);
     result_ = result_ && stmtend(builder_, level_ + 1);
     exit_section_(builder_, marker_, YANG_DEFAULT_STMT, result_);
     return result_;
   }
 
   /* ********************************************************** */
-  // DESCRIPTION STRING stmtend
+  // DESCRIPTION string_stmt stmtend
   public static boolean description_stmt(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "description_stmt")) return false;
     if (!nextTokenIs(builder_, YANG_DESCRIPTION)) return false;
     boolean result_ = false;
     Marker marker_ = enter_section_(builder_);
-    result_ = consumeTokens(builder_, 0, YANG_DESCRIPTION, YANG_STRING);
+    result_ = consumeToken(builder_, YANG_DESCRIPTION);
+    result_ = result_ && string_stmt(builder_, level_ + 1);
     result_ = result_ && stmtend(builder_, level_ + 1);
     exit_section_(builder_, marker_, YANG_DESCRIPTION_STMT, result_);
     return result_;
@@ -1668,13 +1669,15 @@ public class YangParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // DEVIATION STRING LEFT_BRACE [description_stmt] [reference_stmt] (deviate_not_supported_stmt | (deviate_add_stmt | deviate_replace_stmt | deviate_delete_stmt))+ RIGHT_BRACE
+  // DEVIATION string_stmt LEFT_BRACE [description_stmt] [reference_stmt] (deviate_not_supported_stmt | (deviate_add_stmt | deviate_replace_stmt | deviate_delete_stmt))+ RIGHT_BRACE
   public static boolean deviation_stmt(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "deviation_stmt")) return false;
     if (!nextTokenIs(builder_, YANG_DEVIATION)) return false;
     boolean result_ = false;
     Marker marker_ = enter_section_(builder_);
-    result_ = consumeTokens(builder_, 0, YANG_DEVIATION, YANG_STRING, YANG_LEFT_BRACE);
+    result_ = consumeToken(builder_, YANG_DEVIATION);
+    result_ = result_ && string_stmt(builder_, level_ + 1);
+    result_ = result_ && consumeToken(builder_, YANG_LEFT_BRACE);
     result_ = result_ && deviation_stmt_3(builder_, level_ + 1);
     result_ = result_ && deviation_stmt_4(builder_, level_ + 1);
     result_ = result_ && deviation_stmt_5(builder_, level_ + 1);
@@ -1765,13 +1768,14 @@ public class YangParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // ENUM STRING (SEMICOLON | LEFT_BRACE [value_stmt] [status_stmt] [description_stmt] [reference_stmt] RIGHT_BRACE)
+  // ENUM string_stmt (SEMICOLON | LEFT_BRACE [value_stmt] [status_stmt] [description_stmt] [reference_stmt] RIGHT_BRACE)
   public static boolean enum_stmt(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "enum_stmt")) return false;
     if (!nextTokenIs(builder_, YANG_ENUM)) return false;
     boolean result_ = false;
     Marker marker_ = enter_section_(builder_);
-    result_ = consumeTokens(builder_, 0, YANG_ENUM, YANG_STRING);
+    result_ = consumeToken(builder_, YANG_ENUM);
+    result_ = result_ && string_stmt(builder_, level_ + 1);
     result_ = result_ && enum_stmt_2(builder_, level_ + 1);
     exit_section_(builder_, marker_, YANG_ENUM_STMT, result_);
     return result_;
@@ -1832,39 +1836,42 @@ public class YangParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // ERROR_APP_TAG STRING stmtend
+  // ERROR_APP_TAG string_stmt stmtend
   public static boolean error_app_tag_stmt(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "error_app_tag_stmt")) return false;
     if (!nextTokenIs(builder_, YANG_ERROR_APP_TAG)) return false;
     boolean result_ = false;
     Marker marker_ = enter_section_(builder_);
-    result_ = consumeTokens(builder_, 0, YANG_ERROR_APP_TAG, YANG_STRING);
+    result_ = consumeToken(builder_, YANG_ERROR_APP_TAG);
+    result_ = result_ && string_stmt(builder_, level_ + 1);
     result_ = result_ && stmtend(builder_, level_ + 1);
     exit_section_(builder_, marker_, YANG_ERROR_APP_TAG_STMT, result_);
     return result_;
   }
 
   /* ********************************************************** */
-  // ERROR_MESSAGE STRING stmtend
+  // ERROR_MESSAGE string_stmt stmtend
   public static boolean error_message_stmt(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "error_message_stmt")) return false;
     if (!nextTokenIs(builder_, YANG_ERROR_MESSAGE)) return false;
     boolean result_ = false;
     Marker marker_ = enter_section_(builder_);
-    result_ = consumeTokens(builder_, 0, YANG_ERROR_MESSAGE, YANG_STRING);
+    result_ = consumeToken(builder_, YANG_ERROR_MESSAGE);
+    result_ = result_ && string_stmt(builder_, level_ + 1);
     result_ = result_ && stmtend(builder_, level_ + 1);
     exit_section_(builder_, marker_, YANG_ERROR_MESSAGE_STMT, result_);
     return result_;
   }
 
   /* ********************************************************** */
-  // EXTENSION STRING ( SEMICOLON | LEFT_BRACE [argument_stmt] [status_stmt] [description_stmt] [reference_stmt] RIGHT_BRACE )
+  // EXTENSION string_stmt ( SEMICOLON | LEFT_BRACE [argument_stmt] [status_stmt] [description_stmt] [reference_stmt] RIGHT_BRACE )
   public static boolean extension_stmt(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "extension_stmt")) return false;
     if (!nextTokenIs(builder_, YANG_EXTENSION)) return false;
     boolean result_ = false;
     Marker marker_ = enter_section_(builder_);
-    result_ = consumeTokens(builder_, 0, YANG_EXTENSION, YANG_STRING);
+    result_ = consumeToken(builder_, YANG_EXTENSION);
+    result_ = result_ && string_stmt(builder_, level_ + 1);
     result_ = result_ && extension_stmt_2(builder_, level_ + 1);
     exit_section_(builder_, marker_, YANG_EXTENSION_STMT, result_);
     return result_;
@@ -1925,13 +1932,14 @@ public class YangParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // FEATURE STRING (SEMICOLON | LEFT_BRACE (if_feature_stmt+) [status_stmt] [description_stmt] [reference_stmt] RIGHT_BRACE)
+  // FEATURE string_stmt (SEMICOLON | LEFT_BRACE (if_feature_stmt+) [status_stmt] [description_stmt] [reference_stmt] RIGHT_BRACE)
   public static boolean feature_stmt(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "feature_stmt")) return false;
     if (!nextTokenIs(builder_, YANG_FEATURE)) return false;
     boolean result_ = false;
     Marker marker_ = enter_section_(builder_);
-    result_ = consumeTokens(builder_, 0, YANG_FEATURE, YANG_STRING);
+    result_ = consumeToken(builder_, YANG_FEATURE);
+    result_ = result_ && string_stmt(builder_, level_ + 1);
     result_ = result_ && feature_stmt_2(builder_, level_ + 1);
     exit_section_(builder_, marker_, YANG_FEATURE_STMT, result_);
     return result_;
@@ -2001,26 +2009,28 @@ public class YangParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // FRACTION_DIGITS STRING stmtend
+  // FRACTION_DIGITS string_stmt stmtend
   public static boolean fraction_digits_stmt(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "fraction_digits_stmt")) return false;
     if (!nextTokenIs(builder_, YANG_FRACTION_DIGITS)) return false;
     boolean result_ = false;
     Marker marker_ = enter_section_(builder_);
-    result_ = consumeTokens(builder_, 0, YANG_FRACTION_DIGITS, YANG_STRING);
+    result_ = consumeToken(builder_, YANG_FRACTION_DIGITS);
+    result_ = result_ && string_stmt(builder_, level_ + 1);
     result_ = result_ && stmtend(builder_, level_ + 1);
     exit_section_(builder_, marker_, YANG_FRACTION_DIGITS_STMT, result_);
     return result_;
   }
 
   /* ********************************************************** */
-  // GROUPING STRING (SEMICOLON | LEFT_BRACE [status_stmt] [description_stmt] [reference_stmt] (typedef_stmt | grouping_stmt)+ (data_def_stmt)+ RIGHT_BRACE)
+  // GROUPING string_stmt (SEMICOLON | LEFT_BRACE [status_stmt] [description_stmt] [reference_stmt] (typedef_stmt | grouping_stmt)+ (data_def_stmt)+ RIGHT_BRACE)
   public static boolean grouping_stmt(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "grouping_stmt")) return false;
     if (!nextTokenIs(builder_, YANG_GROUPING)) return false;
     boolean result_ = false;
     Marker marker_ = enter_section_(builder_);
-    result_ = consumeTokens(builder_, 0, YANG_GROUPING, YANG_STRING);
+    result_ = consumeToken(builder_, YANG_GROUPING);
+    result_ = result_ && string_stmt(builder_, level_ + 1);
     result_ = result_ && grouping_stmt_2(builder_, level_ + 1);
     exit_section_(builder_, marker_, YANG_GROUPING_STMT, result_);
     return result_;
@@ -2128,7 +2138,7 @@ public class YangParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // IDENTIFIER [STRING]
+  // IDENTIFIER [string_stmt]
   public static boolean identifier_stmt(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "identifier_stmt")) return false;
     if (!nextTokenIs(builder_, YANG_IDENTIFIER)) return false;
@@ -2140,21 +2150,22 @@ public class YangParser implements PsiParser {
     return result_;
   }
 
-  // [STRING]
+  // [string_stmt]
   private static boolean identifier_stmt_1(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "identifier_stmt_1")) return false;
-    consumeToken(builder_, YANG_STRING);
+    string_stmt(builder_, level_ + 1);
     return true;
   }
 
   /* ********************************************************** */
-  // IDENTITY STRING ( SEMICOLON | LEFT_BRACE [base_stmt] [status_stmt] [description_stmt] [reference_stmt] RIGHT_BRACE )
+  // IDENTITY string_stmt ( SEMICOLON | LEFT_BRACE [base_stmt] [status_stmt] [description_stmt] [reference_stmt] RIGHT_BRACE )
   public static boolean identity_stmt(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "identity_stmt")) return false;
     if (!nextTokenIs(builder_, YANG_IDENTITY)) return false;
     boolean result_ = false;
     Marker marker_ = enter_section_(builder_);
-    result_ = consumeTokens(builder_, 0, YANG_IDENTITY, YANG_STRING);
+    result_ = consumeToken(builder_, YANG_IDENTITY);
+    result_ = result_ && string_stmt(builder_, level_ + 1);
     result_ = result_ && identity_stmt_2(builder_, level_ + 1);
     exit_section_(builder_, marker_, YANG_IDENTITY_STMT, result_);
     return result_;
@@ -2221,26 +2232,29 @@ public class YangParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // IF_FEATURE STRING stmtend
+  // IF_FEATURE string_stmt stmtend
   public static boolean if_feature_stmt(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "if_feature_stmt")) return false;
     if (!nextTokenIs(builder_, YANG_IF_FEATURE)) return false;
     boolean result_ = false;
     Marker marker_ = enter_section_(builder_);
-    result_ = consumeTokens(builder_, 0, YANG_IF_FEATURE, YANG_STRING);
+    result_ = consumeToken(builder_, YANG_IF_FEATURE);
+    result_ = result_ && string_stmt(builder_, level_ + 1);
     result_ = result_ && stmtend(builder_, level_ + 1);
     exit_section_(builder_, marker_, YANG_IF_FEATURE_STMT, result_);
     return result_;
   }
 
   /* ********************************************************** */
-  // IMPORT STRING LEFT_BRACE  prefix_stmt [revision_date_stmt] RIGHT_BRACE
+  // IMPORT string_stmt LEFT_BRACE  prefix_stmt [revision_date_stmt] RIGHT_BRACE
   public static boolean import_stmt(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "import_stmt")) return false;
     if (!nextTokenIs(builder_, YANG_IMPORT)) return false;
     boolean result_ = false;
     Marker marker_ = enter_section_(builder_);
-    result_ = consumeTokens(builder_, 0, YANG_IMPORT, YANG_STRING, YANG_LEFT_BRACE);
+    result_ = consumeToken(builder_, YANG_IMPORT);
+    result_ = result_ && string_stmt(builder_, level_ + 1);
+    result_ = result_ && consumeToken(builder_, YANG_LEFT_BRACE);
     result_ = result_ && prefix_stmt(builder_, level_ + 1);
     result_ = result_ && import_stmt_4(builder_, level_ + 1);
     result_ = result_ && consumeToken(builder_, YANG_RIGHT_BRACE);
@@ -2256,13 +2270,14 @@ public class YangParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // INCLUDE STRING (SEMICOLON | LEFT_BRACE [revision_date_stmt] RIGHT_BRACE)
+  // INCLUDE string_stmt (SEMICOLON | LEFT_BRACE [revision_date_stmt] RIGHT_BRACE)
   public static boolean include_stmt(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "include_stmt")) return false;
     if (!nextTokenIs(builder_, YANG_INCLUDE)) return false;
     boolean result_ = false;
     Marker marker_ = enter_section_(builder_);
-    result_ = consumeTokens(builder_, 0, YANG_INCLUDE, YANG_STRING);
+    result_ = consumeToken(builder_, YANG_INCLUDE);
+    result_ = result_ && string_stmt(builder_, level_ + 1);
     result_ = result_ && include_stmt_2(builder_, level_ + 1);
     exit_section_(builder_, marker_, YANG_INCLUDE_STMT, result_);
     return result_;
@@ -2371,26 +2386,29 @@ public class YangParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // KEY STRING stmtend
+  // KEY string_stmt stmtend
   public static boolean key_stmt(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "key_stmt")) return false;
     if (!nextTokenIs(builder_, YANG_KEY)) return false;
     boolean result_ = false;
     Marker marker_ = enter_section_(builder_);
-    result_ = consumeTokens(builder_, 0, YANG_KEY, YANG_STRING);
+    result_ = consumeToken(builder_, YANG_KEY);
+    result_ = result_ && string_stmt(builder_, level_ + 1);
     result_ = result_ && stmtend(builder_, level_ + 1);
     exit_section_(builder_, marker_, YANG_KEY_STMT, result_);
     return result_;
   }
 
   /* ********************************************************** */
-  // LEAF_LIST STRING LEFT_BRACE [when_stmt] (if_feature_stmt)+ type_stmt [units_stmt] (must_stmt)+ [config_stmt] [min_elements_stmt] [max_elements_stmt] [ordered_by_stmt] [status_stmt] [description_stmt] [reference_stmt] RIGHT_BRACE
+  // LEAF_LIST string_stmt LEFT_BRACE [when_stmt] (if_feature_stmt)+ type_stmt [units_stmt] (must_stmt)+ [config_stmt] [min_elements_stmt] [max_elements_stmt] [ordered_by_stmt] [status_stmt] [description_stmt] [reference_stmt] RIGHT_BRACE
   public static boolean leaf_list_stmt(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "leaf_list_stmt")) return false;
     if (!nextTokenIs(builder_, YANG_LEAF_LIST)) return false;
     boolean result_ = false;
     Marker marker_ = enter_section_(builder_);
-    result_ = consumeTokens(builder_, 0, YANG_LEAF_LIST, YANG_STRING, YANG_LEFT_BRACE);
+    result_ = consumeToken(builder_, YANG_LEAF_LIST);
+    result_ = result_ && string_stmt(builder_, level_ + 1);
+    result_ = result_ && consumeToken(builder_, YANG_LEFT_BRACE);
     result_ = result_ && leaf_list_stmt_3(builder_, level_ + 1);
     result_ = result_ && leaf_list_stmt_4(builder_, level_ + 1);
     result_ = result_ && type_stmt(builder_, level_ + 1);
@@ -2524,13 +2542,15 @@ public class YangParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // LEAF STRING LEFT_BRACE [when_stmt] (if_feature_stmt)+ type_stmt [units_stmt] (must_stmt)+ [default_stmt] [config_stmt] [mandatory_stmt] [status_stmt] [description_stmt] [reference_stmt] RIGHT_BRACE
+  // LEAF string_stmt LEFT_BRACE [when_stmt] (if_feature_stmt)+ type_stmt [units_stmt] (must_stmt)+ [default_stmt] [config_stmt] [mandatory_stmt] [status_stmt] [description_stmt] [reference_stmt] RIGHT_BRACE
   public static boolean leaf_stmt(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "leaf_stmt")) return false;
     if (!nextTokenIs(builder_, YANG_LEAF)) return false;
     boolean result_ = false;
     Marker marker_ = enter_section_(builder_);
-    result_ = consumeTokens(builder_, 0, YANG_LEAF, YANG_STRING, YANG_LEFT_BRACE);
+    result_ = consumeToken(builder_, YANG_LEAF);
+    result_ = result_ && string_stmt(builder_, level_ + 1);
+    result_ = result_ && consumeToken(builder_, YANG_LEFT_BRACE);
     result_ = result_ && leaf_stmt_3(builder_, level_ + 1);
     result_ = result_ && leaf_stmt_4(builder_, level_ + 1);
     result_ = result_ && type_stmt(builder_, level_ + 1);
@@ -2662,13 +2682,14 @@ public class YangParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // LENGTH STRING (SEMICOLON | LEFT_BRACE [error_message_stmt] [error_app_tag_stmt] [description_stmt] [reference_stmt] RIGHT_BRACE)
+  // LENGTH string_stmt (SEMICOLON | LEFT_BRACE [error_message_stmt] [error_app_tag_stmt] [description_stmt] [reference_stmt] RIGHT_BRACE)
   public static boolean length_stmt(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "length_stmt")) return false;
     if (!nextTokenIs(builder_, YANG_LENGTH)) return false;
     boolean result_ = false;
     Marker marker_ = enter_section_(builder_);
-    result_ = consumeTokens(builder_, 0, YANG_LENGTH, YANG_STRING);
+    result_ = consumeToken(builder_, YANG_LENGTH);
+    result_ = result_ && string_stmt(builder_, level_ + 1);
     result_ = result_ && length_stmt_2(builder_, level_ + 1);
     exit_section_(builder_, marker_, YANG_LENGTH_STMT, result_);
     return result_;
@@ -2794,13 +2815,15 @@ public class YangParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // LIST STRING LEFT_BRACE [when_stmt] (if_feature_stmt)+ type_stmt [units_stmt] (must_stmt)+ [config_stmt] [min_elements_stmt] [max_elements_stmt] [ordered_by_stmt] [status_stmt] [description_stmt] [reference_stmt] (typedef_stmt | grouping_stmt)+ (data_def_stmt)* RIGHT_BRACE
+  // LIST string_stmt LEFT_BRACE [when_stmt] (if_feature_stmt)+ type_stmt [units_stmt] (must_stmt)+ [config_stmt] [min_elements_stmt] [max_elements_stmt] [ordered_by_stmt] [status_stmt] [description_stmt] [reference_stmt] (typedef_stmt | grouping_stmt)+ (data_def_stmt)* RIGHT_BRACE
   public static boolean list_stmt(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "list_stmt")) return false;
     if (!nextTokenIs(builder_, YANG_LIST)) return false;
     boolean result_ = false;
     Marker marker_ = enter_section_(builder_);
-    result_ = consumeTokens(builder_, 0, YANG_LIST, YANG_STRING, YANG_LEFT_BRACE);
+    result_ = consumeToken(builder_, YANG_LIST);
+    result_ = result_ && string_stmt(builder_, level_ + 1);
+    result_ = result_ && consumeToken(builder_, YANG_LEFT_BRACE);
     result_ = result_ && list_stmt_3(builder_, level_ + 1);
     result_ = result_ && list_stmt_4(builder_, level_ + 1);
     result_ = result_ && type_stmt(builder_, level_ + 1);
@@ -2985,26 +3008,28 @@ public class YangParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // MANDATORY STRING stmtend
+  // MANDATORY string_stmt stmtend
   public static boolean mandatory_stmt(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "mandatory_stmt")) return false;
     if (!nextTokenIs(builder_, YANG_MANDATORY)) return false;
     boolean result_ = false;
     Marker marker_ = enter_section_(builder_);
-    result_ = consumeTokens(builder_, 0, YANG_MANDATORY, YANG_STRING);
+    result_ = consumeToken(builder_, YANG_MANDATORY);
+    result_ = result_ && string_stmt(builder_, level_ + 1);
     result_ = result_ && stmtend(builder_, level_ + 1);
     exit_section_(builder_, marker_, YANG_MANDATORY_STMT, result_);
     return result_;
   }
 
   /* ********************************************************** */
-  // MAX_ELEMENTS STRING stmtend
+  // MAX_ELEMENTS string_stmt stmtend
   public static boolean max_elements_stmt(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "max_elements_stmt")) return false;
     if (!nextTokenIs(builder_, YANG_MAX_ELEMENTS)) return false;
     boolean result_ = false;
     Marker marker_ = enter_section_(builder_);
-    result_ = consumeTokens(builder_, 0, YANG_MAX_ELEMENTS, YANG_STRING);
+    result_ = consumeToken(builder_, YANG_MAX_ELEMENTS);
+    result_ = result_ && string_stmt(builder_, level_ + 1);
     result_ = result_ && stmtend(builder_, level_ + 1);
     exit_section_(builder_, marker_, YANG_MAX_ELEMENTS_STMT, result_);
     return result_;
@@ -3053,13 +3078,14 @@ public class YangParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // MIN_ELEMENTS STRING stmtend
+  // MIN_ELEMENTS string_stmt stmtend
   public static boolean min_elements_stmt(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "min_elements_stmt")) return false;
     if (!nextTokenIs(builder_, YANG_MIN_ELEMENTS)) return false;
     boolean result_ = false;
     Marker marker_ = enter_section_(builder_);
-    result_ = consumeTokens(builder_, 0, YANG_MIN_ELEMENTS, YANG_STRING);
+    result_ = consumeToken(builder_, YANG_MIN_ELEMENTS);
+    result_ = result_ && string_stmt(builder_, level_ + 1);
     result_ = result_ && stmtend(builder_, level_ + 1);
     exit_section_(builder_, marker_, YANG_MIN_ELEMENTS_STMT, result_);
     return result_;
@@ -3087,13 +3113,15 @@ public class YangParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // MODULE STRING LEFT_BRACE module_header_stmts linkage_stmts meta_stmts revision_stmts body_stmts RIGHT_BRACE
+  // MODULE string_stmt LEFT_BRACE module_header_stmts linkage_stmts meta_stmts revision_stmts body_stmts RIGHT_BRACE
   public static boolean module_stmt(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "module_stmt")) return false;
     if (!nextTokenIs(builder_, YANG_MODULE)) return false;
     boolean result_ = false;
     Marker marker_ = enter_section_(builder_);
-    result_ = consumeTokens(builder_, 0, YANG_MODULE, YANG_STRING, YANG_LEFT_BRACE);
+    result_ = consumeToken(builder_, YANG_MODULE);
+    result_ = result_ && string_stmt(builder_, level_ + 1);
+    result_ = result_ && consumeToken(builder_, YANG_LEFT_BRACE);
     result_ = result_ && module_header_stmts(builder_, level_ + 1);
     result_ = result_ && linkage_stmts(builder_, level_ + 1);
     result_ = result_ && meta_stmts(builder_, level_ + 1);
@@ -3105,13 +3133,14 @@ public class YangParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // MUST STRING (SEMICOLON | LEFT_BRACE [error_message_stmt] [error_app_tag_stmt] [description_stmt] [reference_stmt] RIGHT_BRACE)
+  // MUST string_stmt (SEMICOLON | LEFT_BRACE [error_message_stmt] [error_app_tag_stmt] [description_stmt] [reference_stmt] RIGHT_BRACE)
   public static boolean must_stmt(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "must_stmt")) return false;
     if (!nextTokenIs(builder_, YANG_MUST)) return false;
     boolean result_ = false;
     Marker marker_ = enter_section_(builder_);
-    result_ = consumeTokens(builder_, 0, YANG_MUST, YANG_STRING);
+    result_ = consumeToken(builder_, YANG_MUST);
+    result_ = result_ && string_stmt(builder_, level_ + 1);
     result_ = result_ && must_stmt_2(builder_, level_ + 1);
     exit_section_(builder_, marker_, YANG_MUST_STMT, result_);
     return result_;
@@ -3172,26 +3201,28 @@ public class YangParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // NAMESPACE STRING stmtend
+  // NAMESPACE string_stmt stmtend
   public static boolean namespace_stmt(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "namespace_stmt")) return false;
     if (!nextTokenIs(builder_, YANG_NAMESPACE)) return false;
     boolean result_ = false;
     Marker marker_ = enter_section_(builder_);
-    result_ = consumeTokens(builder_, 0, YANG_NAMESPACE, YANG_STRING);
+    result_ = consumeToken(builder_, YANG_NAMESPACE);
+    result_ = result_ && string_stmt(builder_, level_ + 1);
     result_ = result_ && stmtend(builder_, level_ + 1);
     exit_section_(builder_, marker_, YANG_NAMESPACE_STMT, result_);
     return result_;
   }
 
   /* ********************************************************** */
-  // NOTIFICATION STRING (SEMICOLON | LEFT_BRACE (if_feature_stmt)+ [status_stmt] [description_stmt] [reference_stmt] (typedef_stmt | grouping_stmt)+ (data_def_stmt)+ RIGHT_BRACE)
+  // NOTIFICATION string_stmt (SEMICOLON | LEFT_BRACE (if_feature_stmt)+ [status_stmt] [description_stmt] [reference_stmt] (typedef_stmt | grouping_stmt)+ (data_def_stmt)+ RIGHT_BRACE)
   public static boolean notification_stmt(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "notification_stmt")) return false;
     if (!nextTokenIs(builder_, YANG_NOTIFICATION)) return false;
     boolean result_ = false;
     Marker marker_ = enter_section_(builder_);
-    result_ = consumeTokens(builder_, 0, YANG_NOTIFICATION, YANG_STRING);
+    result_ = consumeToken(builder_, YANG_NOTIFICATION);
+    result_ = result_ && string_stmt(builder_, level_ + 1);
     result_ = result_ && notification_stmt_2(builder_, level_ + 1);
     exit_section_(builder_, marker_, YANG_NOTIFICATION_STMT, result_);
     return result_;
@@ -3332,26 +3363,28 @@ public class YangParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // ORDERED_BY STRING stmtend
+  // ORDERED_BY string_stmt stmtend
   public static boolean ordered_by_stmt(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "ordered_by_stmt")) return false;
     if (!nextTokenIs(builder_, YANG_ORDERED_BY)) return false;
     boolean result_ = false;
     Marker marker_ = enter_section_(builder_);
-    result_ = consumeTokens(builder_, 0, YANG_ORDERED_BY, YANG_STRING);
+    result_ = consumeToken(builder_, YANG_ORDERED_BY);
+    result_ = result_ && string_stmt(builder_, level_ + 1);
     result_ = result_ && stmtend(builder_, level_ + 1);
     exit_section_(builder_, marker_, YANG_ORDERED_BY_STMT, result_);
     return result_;
   }
 
   /* ********************************************************** */
-  // ORGANIZATION STRING stmtend
+  // ORGANIZATION string_stmt stmtend
   public static boolean organization_stmt(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "organization_stmt")) return false;
     if (!nextTokenIs(builder_, YANG_ORGANIZATION)) return false;
     boolean result_ = false;
     Marker marker_ = enter_section_(builder_);
-    result_ = consumeTokens(builder_, 0, YANG_ORGANIZATION, YANG_STRING);
+    result_ = consumeToken(builder_, YANG_ORGANIZATION);
+    result_ = result_ && string_stmt(builder_, level_ + 1);
     result_ = result_ && stmtend(builder_, level_ + 1);
     exit_section_(builder_, marker_, YANG_ORGANIZATION_STMT, result_);
     return result_;
@@ -3422,26 +3455,28 @@ public class YangParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // PATH STRING stmtend
+  // PATH string_stmt stmtend
   public static boolean path_stmt(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "path_stmt")) return false;
     if (!nextTokenIs(builder_, YANG_PATH)) return false;
     boolean result_ = false;
     Marker marker_ = enter_section_(builder_);
-    result_ = consumeTokens(builder_, 0, YANG_PATH, YANG_STRING);
+    result_ = consumeToken(builder_, YANG_PATH);
+    result_ = result_ && string_stmt(builder_, level_ + 1);
     result_ = result_ && stmtend(builder_, level_ + 1);
     exit_section_(builder_, marker_, YANG_PATH_STMT, result_);
     return result_;
   }
 
   /* ********************************************************** */
-  // PATTERN STRING (SEMICOLON | LEFT_BRACE [error_message_stmt] [error_app_tag_stmt] [description_stmt] [reference_stmt] RIGHT_BRACE)
+  // PATTERN string_stmt (SEMICOLON | LEFT_BRACE [error_message_stmt] [error_app_tag_stmt] [description_stmt] [reference_stmt] RIGHT_BRACE)
   public static boolean pattern_stmt(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "pattern_stmt")) return false;
     if (!nextTokenIs(builder_, YANG_PATTERN)) return false;
     boolean result_ = false;
     Marker marker_ = enter_section_(builder_);
-    result_ = consumeTokens(builder_, 0, YANG_PATTERN, YANG_STRING);
+    result_ = consumeToken(builder_, YANG_PATTERN);
+    result_ = result_ && string_stmt(builder_, level_ + 1);
     result_ = result_ && pattern_stmt_2(builder_, level_ + 1);
     exit_section_(builder_, marker_, YANG_PATTERN_STMT, result_);
     return result_;
@@ -3502,52 +3537,56 @@ public class YangParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // POSITION STRING stmtend
+  // POSITION string_stmt stmtend
   public static boolean position_stmt(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "position_stmt")) return false;
     if (!nextTokenIs(builder_, YANG_POSITION)) return false;
     boolean result_ = false;
     Marker marker_ = enter_section_(builder_);
-    result_ = consumeTokens(builder_, 0, YANG_POSITION, YANG_STRING);
+    result_ = consumeToken(builder_, YANG_POSITION);
+    result_ = result_ && string_stmt(builder_, level_ + 1);
     result_ = result_ && stmtend(builder_, level_ + 1);
     exit_section_(builder_, marker_, YANG_POSITION_STMT, result_);
     return result_;
   }
 
   /* ********************************************************** */
-  // PREFIX STRING stmtend
+  // PREFIX string_stmt stmtend
   public static boolean prefix_stmt(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "prefix_stmt")) return false;
     if (!nextTokenIs(builder_, YANG_PREFIX)) return false;
     boolean result_ = false;
     Marker marker_ = enter_section_(builder_);
-    result_ = consumeTokens(builder_, 0, YANG_PREFIX, YANG_STRING);
+    result_ = consumeToken(builder_, YANG_PREFIX);
+    result_ = result_ && string_stmt(builder_, level_ + 1);
     result_ = result_ && stmtend(builder_, level_ + 1);
     exit_section_(builder_, marker_, YANG_PREFIX_STMT, result_);
     return result_;
   }
 
   /* ********************************************************** */
-  // PRESENCE STRING stmtend
+  // PRESENCE string_stmt stmtend
   public static boolean presence_stmt(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "presence_stmt")) return false;
     if (!nextTokenIs(builder_, YANG_PRESENCE)) return false;
     boolean result_ = false;
     Marker marker_ = enter_section_(builder_);
-    result_ = consumeTokens(builder_, 0, YANG_PRESENCE, YANG_STRING);
+    result_ = consumeToken(builder_, YANG_PRESENCE);
+    result_ = result_ && string_stmt(builder_, level_ + 1);
     result_ = result_ && stmtend(builder_, level_ + 1);
     exit_section_(builder_, marker_, YANG_PRESENCE_STMT, result_);
     return result_;
   }
 
   /* ********************************************************** */
-  // RANGE STRING (SEMICOLON | LEFT_BRACE [error_message_stmt] [error_app_tag_stmt] [description_stmt] [reference_stmt] RIGHT_BRACE)
+  // RANGE string_stmt (SEMICOLON | LEFT_BRACE [error_message_stmt] [error_app_tag_stmt] [description_stmt] [reference_stmt] RIGHT_BRACE)
   public static boolean range_stmt(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "range_stmt")) return false;
     if (!nextTokenIs(builder_, YANG_RANGE)) return false;
     boolean result_ = false;
     Marker marker_ = enter_section_(builder_);
-    result_ = consumeTokens(builder_, 0, YANG_RANGE, YANG_STRING);
+    result_ = consumeToken(builder_, YANG_RANGE);
+    result_ = result_ && string_stmt(builder_, level_ + 1);
     result_ = result_ && range_stmt_2(builder_, level_ + 1);
     exit_section_(builder_, marker_, YANG_RANGE_STMT, result_);
     return result_;
@@ -3608,13 +3647,14 @@ public class YangParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // REFERENCE  STRING stmtend
+  // REFERENCE  string_stmt stmtend
   public static boolean reference_stmt(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "reference_stmt")) return false;
     if (!nextTokenIs(builder_, YANG_REFERENCE)) return false;
     boolean result_ = false;
     Marker marker_ = enter_section_(builder_);
-    result_ = consumeTokens(builder_, 0, YANG_REFERENCE, YANG_STRING);
+    result_ = consumeToken(builder_, YANG_REFERENCE);
+    result_ = result_ && string_stmt(builder_, level_ + 1);
     result_ = result_ && stmtend(builder_, level_ + 1);
     exit_section_(builder_, marker_, YANG_REFERENCE_STMT, result_);
     return result_;
@@ -4071,13 +4111,14 @@ public class YangParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // REFINE STRING (SEMICOLON | LEFT_BRACE (refine_container_stmts | refine_leaf_stmts | refine_leaf_list_stmts | refine_list_stmts | refine_choice_stmts | refine_case_stmts | refine_anyxml_stmts) RIGHT_BRACE)
+  // REFINE string_stmt (SEMICOLON | LEFT_BRACE (refine_container_stmts | refine_leaf_stmts | refine_leaf_list_stmts | refine_list_stmts | refine_choice_stmts | refine_case_stmts | refine_anyxml_stmts) RIGHT_BRACE)
   public static boolean refine_stmt(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "refine_stmt")) return false;
     if (!nextTokenIs(builder_, YANG_REFINE)) return false;
     boolean result_ = false;
     Marker marker_ = enter_section_(builder_);
-    result_ = consumeTokens(builder_, 0, YANG_REFINE, YANG_STRING);
+    result_ = consumeToken(builder_, YANG_REFINE);
+    result_ = result_ && string_stmt(builder_, level_ + 1);
     result_ = result_ && refine_stmt_2(builder_, level_ + 1);
     exit_section_(builder_, marker_, YANG_REFINE_STMT, result_);
     return result_;
@@ -4123,39 +4164,42 @@ public class YangParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // REQUIRE_INSTANCE STRING stmtend
+  // REQUIRE_INSTANCE string_stmt stmtend
   public static boolean require_instance_stmt(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "require_instance_stmt")) return false;
     if (!nextTokenIs(builder_, YANG_REQUIRE_INSTANCE)) return false;
     boolean result_ = false;
     Marker marker_ = enter_section_(builder_);
-    result_ = consumeTokens(builder_, 0, YANG_REQUIRE_INSTANCE, YANG_STRING);
+    result_ = consumeToken(builder_, YANG_REQUIRE_INSTANCE);
+    result_ = result_ && string_stmt(builder_, level_ + 1);
     result_ = result_ && stmtend(builder_, level_ + 1);
     exit_section_(builder_, marker_, YANG_REQUIRE_INSTANCE_STMT, result_);
     return result_;
   }
 
   /* ********************************************************** */
-  // REVISION_DATE STRING stmtend
+  // REVISION_DATE string_stmt stmtend
   public static boolean revision_date_stmt(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "revision_date_stmt")) return false;
     if (!nextTokenIs(builder_, YANG_REVISION_DATE)) return false;
     boolean result_ = false;
     Marker marker_ = enter_section_(builder_);
-    result_ = consumeTokens(builder_, 0, YANG_REVISION_DATE, YANG_STRING);
+    result_ = consumeToken(builder_, YANG_REVISION_DATE);
+    result_ = result_ && string_stmt(builder_, level_ + 1);
     result_ = result_ && stmtend(builder_, level_ + 1);
     exit_section_(builder_, marker_, YANG_REVISION_DATE_STMT, result_);
     return result_;
   }
 
   /* ********************************************************** */
-  // REVISION STRING (SEMICOLON | LEFT_BRACE [description_stmt] [reference_stmt] RIGHT_BRACE)
+  // REVISION string_stmt (SEMICOLON | LEFT_BRACE [description_stmt] [reference_stmt] RIGHT_BRACE)
   public static boolean revision_stmt(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "revision_stmt")) return false;
     if (!nextTokenIs(builder_, YANG_REVISION)) return false;
     boolean result_ = false;
     Marker marker_ = enter_section_(builder_);
-    result_ = consumeTokens(builder_, 0, YANG_REVISION, YANG_STRING);
+    result_ = consumeToken(builder_, YANG_REVISION);
+    result_ = result_ && string_stmt(builder_, level_ + 1);
     result_ = result_ && revision_stmt_2(builder_, level_ + 1);
     exit_section_(builder_, marker_, YANG_REVISION_STMT, result_);
     return result_;
@@ -4228,13 +4272,14 @@ public class YangParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // RPC STRING (SEMICOLON | LEFT_BRACE (if_feature_stmt)+ [status_stmt] [description_stmt] [reference_stmt] (typedef_stmt | grouping_stmt)+ [input_stmt] [output_stmt] RIGHT_BRACE)
+  // RPC string_stmt (SEMICOLON | LEFT_BRACE (if_feature_stmt)+ [status_stmt] [description_stmt] [reference_stmt] (typedef_stmt | grouping_stmt)+ [input_stmt] [output_stmt] RIGHT_BRACE)
   public static boolean rpc_stmt(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "rpc_stmt")) return false;
     if (!nextTokenIs(builder_, YANG_RPC)) return false;
     boolean result_ = false;
     Marker marker_ = enter_section_(builder_);
-    result_ = consumeTokens(builder_, 0, YANG_RPC, YANG_STRING);
+    result_ = consumeToken(builder_, YANG_RPC);
+    result_ = result_ && string_stmt(builder_, level_ + 1);
     result_ = result_ && rpc_stmt_2(builder_, level_ + 1);
     exit_section_(builder_, marker_, YANG_RPC_STMT, result_);
     return result_;
@@ -4373,47 +4418,30 @@ public class YangParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // STATUS STRING stmtend
+  // STATUS string_stmt stmtend
   public static boolean status_stmt(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "status_stmt")) return false;
     if (!nextTokenIs(builder_, YANG_STATUS)) return false;
     boolean result_ = false;
     Marker marker_ = enter_section_(builder_);
-    result_ = consumeTokens(builder_, 0, YANG_STATUS, YANG_STRING);
+    result_ = consumeToken(builder_, YANG_STATUS);
+    result_ = result_ && string_stmt(builder_, level_ + 1);
     result_ = result_ && stmtend(builder_, level_ + 1);
     exit_section_(builder_, marker_, YANG_STATUS_STMT, result_);
     return result_;
   }
 
   /* ********************************************************** */
-  // SEMICOLON [identifier_stmt] | (LEFT_BRACE [identifier_stmt] RIGHT_BRACE)
+  // (SEMICOLON) | (LEFT_BRACE [identifier_stmt] RIGHT_BRACE)
   public static boolean stmtend(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "stmtend")) return false;
     if (!nextTokenIs(builder_, "<stmtend>", YANG_LEFT_BRACE, YANG_SEMICOLON)) return false;
     boolean result_ = false;
     Marker marker_ = enter_section_(builder_, level_, _NONE_, "<stmtend>");
-    result_ = stmtend_0(builder_, level_ + 1);
+    result_ = consumeToken(builder_, YANG_SEMICOLON);
     if (!result_) result_ = stmtend_1(builder_, level_ + 1);
     exit_section_(builder_, level_, marker_, YANG_STMTEND, result_, false, null);
     return result_;
-  }
-
-  // SEMICOLON [identifier_stmt]
-  private static boolean stmtend_0(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "stmtend_0")) return false;
-    boolean result_ = false;
-    Marker marker_ = enter_section_(builder_);
-    result_ = consumeToken(builder_, YANG_SEMICOLON);
-    result_ = result_ && stmtend_0_1(builder_, level_ + 1);
-    exit_section_(builder_, marker_, null, result_);
-    return result_;
-  }
-
-  // [identifier_stmt]
-  private static boolean stmtend_0_1(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "stmtend_0_1")) return false;
-    identifier_stmt(builder_, level_ + 1);
-    return true;
   }
 
   // LEFT_BRACE [identifier_stmt] RIGHT_BRACE
@@ -4433,6 +4461,87 @@ public class YangParser implements PsiParser {
     if (!recursion_guard_(builder_, level_, "stmtend_1_1")) return false;
     identifier_stmt(builder_, level_ + 1);
     return true;
+  }
+
+  /* ********************************************************** */
+  // [length_stmt] (pattern_stmt)+
+  static boolean string_restrictions(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "string_restrictions")) return false;
+    if (!nextTokenIs(builder_, "", YANG_LENGTH, YANG_PATTERN)) return false;
+    boolean result_ = false;
+    Marker marker_ = enter_section_(builder_);
+    result_ = string_restrictions_0(builder_, level_ + 1);
+    result_ = result_ && string_restrictions_1(builder_, level_ + 1);
+    exit_section_(builder_, marker_, null, result_);
+    return result_;
+  }
+
+  // [length_stmt]
+  private static boolean string_restrictions_0(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "string_restrictions_0")) return false;
+    length_stmt(builder_, level_ + 1);
+    return true;
+  }
+
+  // (pattern_stmt)+
+  private static boolean string_restrictions_1(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "string_restrictions_1")) return false;
+    boolean result_ = false;
+    Marker marker_ = enter_section_(builder_);
+    result_ = string_restrictions_1_0(builder_, level_ + 1);
+    int pos_ = current_position_(builder_);
+    while (result_) {
+      if (!string_restrictions_1_0(builder_, level_ + 1)) break;
+      if (!empty_element_parsed_guard_(builder_, "string_restrictions_1", pos_)) break;
+      pos_ = current_position_(builder_);
+    }
+    exit_section_(builder_, marker_, null, result_);
+    return result_;
+  }
+
+  // (pattern_stmt)
+  private static boolean string_restrictions_1_0(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "string_restrictions_1_0")) return false;
+    boolean result_ = false;
+    Marker marker_ = enter_section_(builder_);
+    result_ = pattern_stmt(builder_, level_ + 1);
+    exit_section_(builder_, marker_, null, result_);
+    return result_;
+  }
+
+  /* ********************************************************** */
+  // STRING (PLUS STRING)*
+  public static boolean string_stmt(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "string_stmt")) return false;
+    if (!nextTokenIs(builder_, YANG_STRING)) return false;
+    boolean result_ = false;
+    Marker marker_ = enter_section_(builder_);
+    result_ = consumeToken(builder_, YANG_STRING);
+    result_ = result_ && string_stmt_1(builder_, level_ + 1);
+    exit_section_(builder_, marker_, YANG_STRING_STMT, result_);
+    return result_;
+  }
+
+  // (PLUS STRING)*
+  private static boolean string_stmt_1(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "string_stmt_1")) return false;
+    int pos_ = current_position_(builder_);
+    while (true) {
+      if (!string_stmt_1_0(builder_, level_ + 1)) break;
+      if (!empty_element_parsed_guard_(builder_, "string_stmt_1", pos_)) break;
+      pos_ = current_position_(builder_);
+    }
+    return true;
+  }
+
+  // PLUS STRING
+  private static boolean string_stmt_1_0(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "string_stmt_1_0")) return false;
+    boolean result_ = false;
+    Marker marker_ = enter_section_(builder_);
+    result_ = consumeTokens(builder_, 0, YANG_PLUS, YANG_STRING);
+    exit_section_(builder_, marker_, null, result_);
+    return result_;
   }
 
   /* ********************************************************** */
@@ -4456,13 +4565,15 @@ public class YangParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // SUBMODULE STRING LEFT_BRACE submodule_header_stmts linkage_stmts meta_stmts revision_stmts body_stmts RIGHT_BRACE
+  // SUBMODULE string_stmt LEFT_BRACE submodule_header_stmts linkage_stmts meta_stmts revision_stmts body_stmts RIGHT_BRACE
   public static boolean submodule_stmt(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "submodule_stmt")) return false;
     if (!nextTokenIs(builder_, YANG_SUBMODULE)) return false;
     boolean result_ = false;
     Marker marker_ = enter_section_(builder_);
-    result_ = consumeTokens(builder_, 0, YANG_SUBMODULE, YANG_STRING, YANG_LEFT_BRACE);
+    result_ = consumeToken(builder_, YANG_SUBMODULE);
+    result_ = result_ && string_stmt(builder_, level_ + 1);
+    result_ = result_ && consumeToken(builder_, YANG_LEFT_BRACE);
     result_ = result_ && submodule_header_stmts(builder_, level_ + 1);
     result_ = result_ && linkage_stmts(builder_, level_ + 1);
     result_ = result_ && meta_stmts(builder_, level_ + 1);
@@ -4474,14 +4585,14 @@ public class YangParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // numerical_restrictions | decimal64_specification | STRING_restrictions | enum_specification | leafref_specification | identityref_specification | instance_identifier_specification | bits_specification | union_specification | binary_specification
+  // numerical_restrictions | decimal64_specification | string_restrictions | enum_specification | leafref_specification | identityref_specification | instance_identifier_specification | bits_specification | union_specification | binary_specification
   static boolean type_body_stmts(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "type_body_stmts")) return false;
     boolean result_ = false;
     Marker marker_ = enter_section_(builder_);
     result_ = numerical_restrictions(builder_, level_ + 1);
     if (!result_) result_ = decimal64_specification(builder_, level_ + 1);
-    if (!result_) result_ = STRING_restrictions(builder_, level_ + 1);
+    if (!result_) result_ = string_restrictions(builder_, level_ + 1);
     if (!result_) result_ = enum_specification(builder_, level_ + 1);
     if (!result_) result_ = leafref_specification(builder_, level_ + 1);
     if (!result_) result_ = identityref_specification(builder_, level_ + 1);
@@ -4494,13 +4605,14 @@ public class YangParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // TYPE STRING ( SEMICOLON | RIGHT_BRACE type_body_stmts RIGHT_BRACE )
+  // TYPE string_stmt ( SEMICOLON | RIGHT_BRACE type_body_stmts RIGHT_BRACE )
   public static boolean type_stmt(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "type_stmt")) return false;
     if (!nextTokenIs(builder_, YANG_TYPE)) return false;
     boolean result_ = false;
     Marker marker_ = enter_section_(builder_);
-    result_ = consumeTokens(builder_, 0, YANG_TYPE, YANG_STRING);
+    result_ = consumeToken(builder_, YANG_TYPE);
+    result_ = result_ && string_stmt(builder_, level_ + 1);
     result_ = result_ && type_stmt_2(builder_, level_ + 1);
     exit_section_(builder_, marker_, YANG_TYPE_STMT, result_);
     return result_;
@@ -4530,13 +4642,15 @@ public class YangParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // TYPEDEF STRING LEFT_BRACE type_stmt [units_stmt] [default_stmt] [status_stmt] [description_stmt] [reference_stmt] RIGHT_BRACE
+  // TYPEDEF string_stmt LEFT_BRACE type_stmt [units_stmt] [default_stmt] [status_stmt] [description_stmt] [reference_stmt] RIGHT_BRACE
   public static boolean typedef_stmt(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "typedef_stmt")) return false;
     if (!nextTokenIs(builder_, YANG_TYPEDEF)) return false;
     boolean result_ = false;
     Marker marker_ = enter_section_(builder_);
-    result_ = consumeTokens(builder_, 0, YANG_TYPEDEF, YANG_STRING, YANG_LEFT_BRACE);
+    result_ = consumeToken(builder_, YANG_TYPEDEF);
+    result_ = result_ && string_stmt(builder_, level_ + 1);
+    result_ = result_ && consumeToken(builder_, YANG_LEFT_BRACE);
     result_ = result_ && type_stmt(builder_, level_ + 1);
     result_ = result_ && typedef_stmt_4(builder_, level_ + 1);
     result_ = result_ && typedef_stmt_5(builder_, level_ + 1);
@@ -4607,39 +4721,43 @@ public class YangParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // UNIQUE STRING stmtend
+  // UNIQUE string_stmt stmtend
   public static boolean unique_stmt(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "unique_stmt")) return false;
     if (!nextTokenIs(builder_, YANG_UNIQUE)) return false;
     boolean result_ = false;
     Marker marker_ = enter_section_(builder_);
-    result_ = consumeTokens(builder_, 0, YANG_UNIQUE, YANG_STRING);
+    result_ = consumeToken(builder_, YANG_UNIQUE);
+    result_ = result_ && string_stmt(builder_, level_ + 1);
     result_ = result_ && stmtend(builder_, level_ + 1);
     exit_section_(builder_, marker_, YANG_UNIQUE_STMT, result_);
     return result_;
   }
 
   /* ********************************************************** */
-  // UNITS STRING stmtend
+  // UNITS string_stmt stmtend
   public static boolean units_stmt(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "units_stmt")) return false;
     if (!nextTokenIs(builder_, YANG_UNITS)) return false;
     boolean result_ = false;
     Marker marker_ = enter_section_(builder_);
-    result_ = consumeTokens(builder_, 0, YANG_UNITS, YANG_STRING);
+    result_ = consumeToken(builder_, YANG_UNITS);
+    result_ = result_ && string_stmt(builder_, level_ + 1);
     result_ = result_ && stmtend(builder_, level_ + 1);
     exit_section_(builder_, marker_, YANG_UNITS_STMT, result_);
     return result_;
   }
 
   /* ********************************************************** */
-  // AUGMENT STRING LEFT_BRACE [when_stmt] (if_feature_stmt)+ [status_stmt] [description_stmt] [reference_stmt] ((data_def_stmt)+ | (case_stmt))* RIGHT_BRACE
+  // AUGMENT string_stmt LEFT_BRACE [when_stmt] (if_feature_stmt)+ [status_stmt] [description_stmt] [reference_stmt] ((data_def_stmt)+ | (case_stmt))* RIGHT_BRACE
   public static boolean uses_augment_stmt(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "uses_augment_stmt")) return false;
     if (!nextTokenIs(builder_, YANG_AUGMENT)) return false;
     boolean result_ = false;
     Marker marker_ = enter_section_(builder_);
-    result_ = consumeTokens(builder_, 0, YANG_AUGMENT, YANG_STRING, YANG_LEFT_BRACE);
+    result_ = consumeToken(builder_, YANG_AUGMENT);
+    result_ = result_ && string_stmt(builder_, level_ + 1);
+    result_ = result_ && consumeToken(builder_, YANG_LEFT_BRACE);
     result_ = result_ && uses_augment_stmt_3(builder_, level_ + 1);
     result_ = result_ && uses_augment_stmt_4(builder_, level_ + 1);
     result_ = result_ && uses_augment_stmt_5(builder_, level_ + 1);
@@ -4765,13 +4883,14 @@ public class YangParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // USES STRING (SEMICOLON | LEFT_BRACE [when_stmt] (if_feature_stmt)+ [status_stmt] [description_stmt] [reference_stmt] (refine_stmt)+ (uses_augment_stmt)+ RIGHT_BRACE)
+  // USES string_stmt (SEMICOLON | LEFT_BRACE [when_stmt] (if_feature_stmt)+ [status_stmt] [description_stmt] [reference_stmt] (refine_stmt)+ (uses_augment_stmt)+ RIGHT_BRACE)
   public static boolean uses_stmt(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "uses_stmt")) return false;
     if (!nextTokenIs(builder_, YANG_USES)) return false;
     boolean result_ = false;
     Marker marker_ = enter_section_(builder_);
-    result_ = consumeTokens(builder_, 0, YANG_USES, YANG_STRING);
+    result_ = consumeToken(builder_, YANG_USES);
+    result_ = result_ && string_stmt(builder_, level_ + 1);
     result_ = result_ && uses_stmt_2(builder_, level_ + 1);
     exit_section_(builder_, marker_, YANG_USES_STMT, result_);
     return result_;
@@ -4913,26 +5032,28 @@ public class YangParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // VALUE STRING stmtend
+  // VALUE string_stmt stmtend
   public static boolean value_stmt(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "value_stmt")) return false;
     if (!nextTokenIs(builder_, YANG_VALUE)) return false;
     boolean result_ = false;
     Marker marker_ = enter_section_(builder_);
-    result_ = consumeTokens(builder_, 0, YANG_VALUE, YANG_STRING);
+    result_ = consumeToken(builder_, YANG_VALUE);
+    result_ = result_ && string_stmt(builder_, level_ + 1);
     result_ = result_ && stmtend(builder_, level_ + 1);
     exit_section_(builder_, marker_, YANG_VALUE_STMT, result_);
     return result_;
   }
 
   /* ********************************************************** */
-  // WHEN STRING (SEMICOLON | LEFT_BRACE [description_stmt] [reference_stmt] RIGHT_BRACE)
+  // WHEN string_stmt (SEMICOLON | LEFT_BRACE [description_stmt] [reference_stmt] RIGHT_BRACE)
   public static boolean when_stmt(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "when_stmt")) return false;
     if (!nextTokenIs(builder_, YANG_WHEN)) return false;
     boolean result_ = false;
     Marker marker_ = enter_section_(builder_);
-    result_ = consumeTokens(builder_, 0, YANG_WHEN, YANG_STRING);
+    result_ = consumeToken(builder_, YANG_WHEN);
+    result_ = result_ && string_stmt(builder_, level_ + 1);
     result_ = result_ && when_stmt_2(builder_, level_ + 1);
     exit_section_(builder_, marker_, YANG_WHEN_STMT, result_);
     return result_;
@@ -4977,35 +5098,23 @@ public class YangParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // module_stmt | submodule_stmt
-  static boolean yang(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "yang")) return false;
-    if (!nextTokenIs(builder_, "", YANG_MODULE, YANG_SUBMODULE)) return false;
-    boolean result_ = false;
-    Marker marker_ = enter_section_(builder_);
-    result_ = module_stmt(builder_, level_ + 1);
-    if (!result_) result_ = submodule_stmt(builder_, level_ + 1);
-    exit_section_(builder_, marker_, null, result_);
-    return result_;
-  }
-
-  /* ********************************************************** */
-  // YANG_VERSION STRING stmtend
+  // YANG_VERSION string_stmt stmtend
   public static boolean yang_version_stmt(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "yang_version_stmt")) return false;
     if (!nextTokenIs(builder_, YANG_YANG_VERSION)) return false;
     boolean result_ = false;
     Marker marker_ = enter_section_(builder_);
-    result_ = consumeTokens(builder_, 0, YANG_YANG_VERSION, YANG_STRING);
+    result_ = consumeToken(builder_, YANG_YANG_VERSION);
+    result_ = result_ && string_stmt(builder_, level_ + 1);
     result_ = result_ && stmtend(builder_, level_ + 1);
     exit_section_(builder_, marker_, YANG_YANG_VERSION_STMT, result_);
     return result_;
   }
 
   /* ********************************************************** */
-  // STRING
+  // string_stmt
   static boolean yin_element_arg(PsiBuilder builder_, int level_) {
-    return consumeToken(builder_, YANG_STRING);
+    return string_stmt(builder_, level_ + 1);
   }
 
   /* ********************************************************** */

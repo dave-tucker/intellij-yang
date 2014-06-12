@@ -74,6 +74,9 @@ public interface YangSubmoduleStmt extends PsiElement {
   List<YangRpcStmt> getRpcStmtList();
 
   @NotNull
+  YangStringStmt getStringStmt();
+
+  @NotNull
   List<YangTypedefStmt> getTypedefStmtList();
 
   @NotNull
