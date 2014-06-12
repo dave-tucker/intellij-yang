@@ -24,6 +24,12 @@ public class YangImportStmtImpl extends ASTWrapperPsiElement implements YangImpo
 
   @Override
   @NotNull
+  public YangAString getAString() {
+    return findNotNullChildByClass(YangAString.class);
+  }
+
+  @Override
+  @NotNull
   public YangPrefixStmt getPrefixStmt() {
     return findNotNullChildByClass(YangPrefixStmt.class);
   }
@@ -32,12 +38,6 @@ public class YangImportStmtImpl extends ASTWrapperPsiElement implements YangImpo
   @Nullable
   public YangRevisionDateStmt getRevisionDateStmt() {
     return findChildByClass(YangRevisionDateStmt.class);
-  }
-
-  @Override
-  @NotNull
-  public YangStringStmt getStringStmt() {
-    return findNotNullChildByClass(YangStringStmt.class);
   }
 
 }

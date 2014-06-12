@@ -7,8 +7,11 @@ import com.intellij.psi.PsiElement;
 
 public interface YangDeviationStmt extends PsiElement {
 
-  @Nullable
-  YangDescriptionStmt getDescriptionStmt();
+  @NotNull
+  YangAString getAString();
+
+  @NotNull
+  List<YangDescriptionStmt> getDescriptionStmtList();
 
   @NotNull
   List<YangDeviateAddStmt> getDeviateAddStmtList();
@@ -22,10 +25,10 @@ public interface YangDeviationStmt extends PsiElement {
   @NotNull
   List<YangDeviateReplaceStmt> getDeviateReplaceStmtList();
 
-  @Nullable
-  YangReferenceStmt getReferenceStmt();
+  @NotNull
+  List<YangIdentifierStmt> getIdentifierStmtList();
 
   @NotNull
-  YangStringStmt getStringStmt();
+  List<YangReferenceStmt> getReferenceStmtList();
 
 }

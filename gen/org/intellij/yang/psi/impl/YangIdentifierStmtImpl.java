@@ -24,8 +24,20 @@ public class YangIdentifierStmtImpl extends ASTWrapperPsiElement implements Yang
 
   @Override
   @Nullable
-  public YangStringStmt getStringStmt() {
-    return findChildByClass(YangStringStmt.class);
+  public YangAString getAString() {
+    return findChildByClass(YangAString.class);
+  }
+
+  @Override
+  @Nullable
+  public YangStmtend getStmtend() {
+    return findChildByClass(YangStmtend.class);
+  }
+
+  @Override
+  @NotNull
+  public List<YangUnknownStatement> getUnknownStatementList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, YangUnknownStatement.class);
   }
 
 }

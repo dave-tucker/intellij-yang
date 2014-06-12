@@ -7,29 +7,32 @@ import com.intellij.psi.PsiElement;
 
 public interface YangRpcStmt extends PsiElement {
 
-  @Nullable
-  YangDescriptionStmt getDescriptionStmt();
+  @NotNull
+  YangAString getAString();
+
+  @NotNull
+  List<YangDescriptionStmt> getDescriptionStmtList();
 
   @NotNull
   List<YangGroupingStmt> getGroupingStmtList();
 
   @NotNull
-  List<YangIfFeatureStmt> getIfFeatureStmtList();
-
-  @Nullable
-  YangInputStmt getInputStmt();
-
-  @Nullable
-  YangOutputStmt getOutputStmt();
-
-  @Nullable
-  YangReferenceStmt getReferenceStmt();
-
-  @Nullable
-  YangStatusStmt getStatusStmt();
+  List<YangIdentifierStmt> getIdentifierStmtList();
 
   @NotNull
-  YangStringStmt getStringStmt();
+  List<YangIfFeatureStmt> getIfFeatureStmtList();
+
+  @NotNull
+  List<YangInputStmt> getInputStmtList();
+
+  @NotNull
+  List<YangOutputStmt> getOutputStmtList();
+
+  @NotNull
+  List<YangReferenceStmt> getReferenceStmtList();
+
+  @NotNull
+  List<YangStatusStmt> getStatusStmtList();
 
   @NotNull
   List<YangTypedefStmt> getTypedefStmtList();

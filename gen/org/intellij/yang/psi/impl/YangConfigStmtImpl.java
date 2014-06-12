@@ -24,14 +24,14 @@ public class YangConfigStmtImpl extends ASTWrapperPsiElement implements YangConf
 
   @Override
   @NotNull
-  public YangStmtend getStmtend() {
-    return findNotNullChildByClass(YangStmtend.class);
+  public YangConfigArg getConfigArg() {
+    return findNotNullChildByClass(YangConfigArg.class);
   }
 
   @Override
   @NotNull
-  public YangStringStmt getStringStmt() {
-    return findNotNullChildByClass(YangStringStmt.class);
+  public YangStmtend getStmtend() {
+    return findNotNullChildByClass(YangStmtend.class);
   }
 
 }

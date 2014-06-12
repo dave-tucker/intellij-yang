@@ -8,48 +8,39 @@ import com.intellij.psi.PsiElement;
 public interface YangChoiceStmt extends PsiElement {
 
   @NotNull
-  List<YangAnyxmlStmt> getAnyxmlStmtList();
+  YangAString getAString();
 
   @NotNull
   List<YangCaseStmt> getCaseStmtList();
 
-  @Nullable
-  YangConfigStmt getConfigStmt();
+  @NotNull
+  List<YangConfigStmt> getConfigStmtList();
 
   @NotNull
-  List<YangContainerStmt> getContainerStmtList();
+  List<YangDefaultStmt> getDefaultStmtList();
 
-  @Nullable
-  YangDefaultStmt getDefaultStmt();
+  @NotNull
+  List<YangDescriptionStmt> getDescriptionStmtList();
 
-  @Nullable
-  YangDescriptionStmt getDescriptionStmt();
+  @NotNull
+  List<YangIdentifierStmt> getIdentifierStmtList();
 
   @NotNull
   List<YangIfFeatureStmt> getIfFeatureStmtList();
 
   @NotNull
-  List<YangLeafListStmt> getLeafListStmtList();
+  List<YangMandatoryStmt> getMandatoryStmtList();
 
   @NotNull
-  List<YangLeafStmt> getLeafStmtList();
+  List<YangReferenceStmt> getReferenceStmtList();
 
   @NotNull
-  List<YangListStmt> getListStmtList();
-
-  @Nullable
-  YangMandatoryStmt getMandatoryStmt();
-
-  @Nullable
-  YangReferenceStmt getReferenceStmt();
-
-  @Nullable
-  YangStatusStmt getStatusStmt();
+  List<YangShortCaseStmt> getShortCaseStmtList();
 
   @NotNull
-  YangStringStmt getStringStmt();
+  List<YangStatusStmt> getStatusStmtList();
 
-  @Nullable
-  YangWhenStmt getWhenStmt();
+  @NotNull
+  List<YangWhenStmt> getWhenStmtList();
 
 }

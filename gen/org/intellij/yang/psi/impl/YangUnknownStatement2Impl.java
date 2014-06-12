@@ -11,15 +11,27 @@ import static org.intellij.yang.psi.YangTypes.*;
 import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import org.intellij.yang.psi.*;
 
-public class YangStringStmtImpl extends ASTWrapperPsiElement implements YangStringStmt {
+public class YangUnknownStatement2Impl extends ASTWrapperPsiElement implements YangUnknownStatement2 {
 
-  public YangStringStmtImpl(ASTNode node) {
+  public YangUnknownStatement2Impl(ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof YangVisitor) ((YangVisitor)visitor).visitStringStmt(this);
+    if (visitor instanceof YangVisitor) ((YangVisitor)visitor).visitUnknownStatement2(this);
     else super.accept(visitor);
+  }
+
+  @Override
+  @Nullable
+  public YangAString getAString() {
+    return findChildByClass(YangAString.class);
+  }
+
+  @Override
+  @NotNull
+  public List<YangUnknownStatement3> getUnknownStatement3List() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, YangUnknownStatement3.class);
   }
 
 }

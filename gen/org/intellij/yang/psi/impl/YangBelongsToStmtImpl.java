@@ -24,14 +24,14 @@ public class YangBelongsToStmtImpl extends ASTWrapperPsiElement implements YangB
 
   @Override
   @NotNull
-  public YangPrefixStmt getPrefixStmt() {
-    return findNotNullChildByClass(YangPrefixStmt.class);
+  public YangAString getAString() {
+    return findNotNullChildByClass(YangAString.class);
   }
 
   @Override
   @NotNull
-  public YangStringStmt getStringStmt() {
-    return findNotNullChildByClass(YangStringStmt.class);
+  public YangPrefixStmt getPrefixStmt() {
+    return findNotNullChildByClass(YangPrefixStmt.class);
   }
 
 }

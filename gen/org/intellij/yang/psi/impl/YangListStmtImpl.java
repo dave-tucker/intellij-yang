@@ -24,32 +24,26 @@ public class YangListStmtImpl extends ASTWrapperPsiElement implements YangListSt
 
   @Override
   @NotNull
-  public List<YangAnyxmlStmt> getAnyxmlStmtList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, YangAnyxmlStmt.class);
+  public YangAString getAString() {
+    return findNotNullChildByClass(YangAString.class);
   }
 
   @Override
   @NotNull
-  public List<YangChoiceStmt> getChoiceStmtList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, YangChoiceStmt.class);
-  }
-
-  @Override
-  @Nullable
-  public YangConfigStmt getConfigStmt() {
-    return findChildByClass(YangConfigStmt.class);
+  public List<YangConfigStmt> getConfigStmtList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, YangConfigStmt.class);
   }
 
   @Override
   @NotNull
-  public List<YangContainerStmt> getContainerStmtList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, YangContainerStmt.class);
+  public List<YangDataDefStmt> getDataDefStmtList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, YangDataDefStmt.class);
   }
 
   @Override
-  @Nullable
-  public YangDescriptionStmt getDescriptionStmt() {
-    return findChildByClass(YangDescriptionStmt.class);
+  @NotNull
+  public List<YangDescriptionStmt> getDescriptionStmtList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, YangDescriptionStmt.class);
   }
 
   @Override
@@ -60,38 +54,32 @@ public class YangListStmtImpl extends ASTWrapperPsiElement implements YangListSt
 
   @Override
   @NotNull
+  public List<YangIdentifierStmt> getIdentifierStmtList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, YangIdentifierStmt.class);
+  }
+
+  @Override
+  @NotNull
   public List<YangIfFeatureStmt> getIfFeatureStmtList() {
     return PsiTreeUtil.getChildrenOfTypeAsList(this, YangIfFeatureStmt.class);
   }
 
   @Override
   @NotNull
-  public List<YangLeafListStmt> getLeafListStmtList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, YangLeafListStmt.class);
+  public List<YangKeyStmt> getKeyStmtList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, YangKeyStmt.class);
   }
 
   @Override
   @NotNull
-  public List<YangLeafStmt> getLeafStmtList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, YangLeafStmt.class);
+  public List<YangMaxElementsStmt> getMaxElementsStmtList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, YangMaxElementsStmt.class);
   }
 
   @Override
   @NotNull
-  public List<YangListStmt> getListStmtList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, YangListStmt.class);
-  }
-
-  @Override
-  @Nullable
-  public YangMaxElementsStmt getMaxElementsStmt() {
-    return findChildByClass(YangMaxElementsStmt.class);
-  }
-
-  @Override
-  @Nullable
-  public YangMinElementsStmt getMinElementsStmt() {
-    return findChildByClass(YangMinElementsStmt.class);
+  public List<YangMinElementsStmt> getMinElementsStmtList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, YangMinElementsStmt.class);
   }
 
   @Override
@@ -101,33 +89,21 @@ public class YangListStmtImpl extends ASTWrapperPsiElement implements YangListSt
   }
 
   @Override
-  @Nullable
-  public YangOrderedByStmt getOrderedByStmt() {
-    return findChildByClass(YangOrderedByStmt.class);
-  }
-
-  @Override
-  @Nullable
-  public YangReferenceStmt getReferenceStmt() {
-    return findChildByClass(YangReferenceStmt.class);
-  }
-
-  @Override
-  @Nullable
-  public YangStatusStmt getStatusStmt() {
-    return findChildByClass(YangStatusStmt.class);
+  @NotNull
+  public List<YangOrderedByStmt> getOrderedByStmtList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, YangOrderedByStmt.class);
   }
 
   @Override
   @NotNull
-  public YangStringStmt getStringStmt() {
-    return findNotNullChildByClass(YangStringStmt.class);
+  public List<YangReferenceStmt> getReferenceStmtList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, YangReferenceStmt.class);
   }
 
   @Override
   @NotNull
-  public YangTypeStmt getTypeStmt() {
-    return findNotNullChildByClass(YangTypeStmt.class);
+  public List<YangStatusStmt> getStatusStmtList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, YangStatusStmt.class);
   }
 
   @Override
@@ -137,21 +113,15 @@ public class YangListStmtImpl extends ASTWrapperPsiElement implements YangListSt
   }
 
   @Override
-  @Nullable
-  public YangUnitsStmt getUnitsStmt() {
-    return findChildByClass(YangUnitsStmt.class);
+  @NotNull
+  public List<YangUniqueStmt> getUniqueStmtList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, YangUniqueStmt.class);
   }
 
   @Override
   @NotNull
-  public List<YangUsesStmt> getUsesStmtList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, YangUsesStmt.class);
-  }
-
-  @Override
-  @Nullable
-  public YangWhenStmt getWhenStmt() {
-    return findChildByClass(YangWhenStmt.class);
+  public List<YangWhenStmt> getWhenStmtList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, YangWhenStmt.class);
   }
 
 }

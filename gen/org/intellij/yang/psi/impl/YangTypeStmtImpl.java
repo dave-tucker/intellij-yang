@@ -23,69 +23,15 @@ public class YangTypeStmtImpl extends ASTWrapperPsiElement implements YangTypeSt
   }
 
   @Override
-  @Nullable
-  public YangBaseStmt getBaseStmt() {
-    return findChildByClass(YangBaseStmt.class);
-  }
-
-  @Override
   @NotNull
-  public List<YangBitStmt> getBitStmtList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, YangBitStmt.class);
-  }
-
-  @Override
-  @NotNull
-  public List<YangEnumStmt> getEnumStmtList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, YangEnumStmt.class);
+  public YangAString getAString() {
+    return findNotNullChildByClass(YangAString.class);
   }
 
   @Override
   @Nullable
-  public YangFractionDigitsStmt getFractionDigitsStmt() {
-    return findChildByClass(YangFractionDigitsStmt.class);
-  }
-
-  @Override
-  @Nullable
-  public YangLengthStmt getLengthStmt() {
-    return findChildByClass(YangLengthStmt.class);
-  }
-
-  @Override
-  @Nullable
-  public YangPathStmt getPathStmt() {
-    return findChildByClass(YangPathStmt.class);
-  }
-
-  @Override
-  @NotNull
-  public List<YangPatternStmt> getPatternStmtList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, YangPatternStmt.class);
-  }
-
-  @Override
-  @Nullable
-  public YangRangeStmt getRangeStmt() {
-    return findChildByClass(YangRangeStmt.class);
-  }
-
-  @Override
-  @Nullable
-  public YangRequireInstanceStmt getRequireInstanceStmt() {
-    return findChildByClass(YangRequireInstanceStmt.class);
-  }
-
-  @Override
-  @NotNull
-  public YangStringStmt getStringStmt() {
-    return findNotNullChildByClass(YangStringStmt.class);
-  }
-
-  @Override
-  @NotNull
-  public List<YangTypeStmt> getTypeStmtList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, YangTypeStmt.class);
+  public YangTypeBodyStmts getTypeBodyStmts() {
+    return findChildByClass(YangTypeBodyStmts.class);
   }
 
 }

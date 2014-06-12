@@ -8,9 +8,9 @@ import com.intellij.psi.PsiElement;
 public interface YangMaxElementsStmt extends PsiElement {
 
   @NotNull
-  YangStmtend getStmtend();
+  YangMaxValueArg getMaxValueArg();
 
   @NotNull
-  YangStringStmt getStringStmt();
+  YangStmtend getStmtend();
 
 }

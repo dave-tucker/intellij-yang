@@ -7,13 +7,13 @@ import com.intellij.psi.PsiElement;
 
 public interface YangRevisionStmt extends PsiElement {
 
+  @NotNull
+  YangAString getAString();
+
   @Nullable
   YangDescriptionStmt getDescriptionStmt();
 
   @Nullable
   YangReferenceStmt getReferenceStmt();
-
-  @NotNull
-  YangStringStmt getStringStmt();
 
 }

@@ -23,15 +23,15 @@ public class YangIncludeStmtImpl extends ASTWrapperPsiElement implements YangInc
   }
 
   @Override
-  @Nullable
-  public YangRevisionDateStmt getRevisionDateStmt() {
-    return findChildByClass(YangRevisionDateStmt.class);
+  @NotNull
+  public YangAString getAString() {
+    return findNotNullChildByClass(YangAString.class);
   }
 
   @Override
-  @NotNull
-  public YangStringStmt getStringStmt() {
-    return findNotNullChildByClass(YangStringStmt.class);
+  @Nullable
+  public YangRevisionDateStmt getRevisionDateStmt() {
+    return findChildByClass(YangRevisionDateStmt.class);
   }
 
 }

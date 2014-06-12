@@ -8,81 +8,21 @@ import com.intellij.psi.PsiElement;
 public interface YangSubmoduleStmt extends PsiElement {
 
   @NotNull
-  List<YangAnyxmlStmt> getAnyxmlStmtList();
+  YangAString getAString();
 
   @NotNull
-  List<YangAugmentStmt> getAugmentStmtList();
+  YangBodyStmts getBodyStmts();
 
   @NotNull
-  YangBelongsToStmt getBelongsToStmt();
+  YangLinkageStmts getLinkageStmts();
 
   @NotNull
-  List<YangChoiceStmt> getChoiceStmtList();
-
-  @Nullable
-  YangContactStmt getContactStmt();
+  YangMetaStmts getMetaStmts();
 
   @NotNull
-  List<YangContainerStmt> getContainerStmtList();
-
-  @Nullable
-  YangDescriptionStmt getDescriptionStmt();
+  YangRevisionStmts getRevisionStmts();
 
   @NotNull
-  List<YangDeviationStmt> getDeviationStmtList();
-
-  @NotNull
-  List<YangExtensionStmt> getExtensionStmtList();
-
-  @NotNull
-  List<YangFeatureStmt> getFeatureStmtList();
-
-  @NotNull
-  List<YangGroupingStmt> getGroupingStmtList();
-
-  @NotNull
-  List<YangIdentityStmt> getIdentityStmtList();
-
-  @NotNull
-  List<YangImportStmt> getImportStmtList();
-
-  @NotNull
-  List<YangIncludeStmt> getIncludeStmtList();
-
-  @NotNull
-  List<YangLeafListStmt> getLeafListStmtList();
-
-  @NotNull
-  List<YangLeafStmt> getLeafStmtList();
-
-  @NotNull
-  List<YangListStmt> getListStmtList();
-
-  @NotNull
-  List<YangNotificationStmt> getNotificationStmtList();
-
-  @Nullable
-  YangOrganizationStmt getOrganizationStmt();
-
-  @Nullable
-  YangReferenceStmt getReferenceStmt();
-
-  @NotNull
-  List<YangRevisionStmt> getRevisionStmtList();
-
-  @NotNull
-  List<YangRpcStmt> getRpcStmtList();
-
-  @NotNull
-  YangStringStmt getStringStmt();
-
-  @NotNull
-  List<YangTypedefStmt> getTypedefStmtList();
-
-  @NotNull
-  List<YangUsesStmt> getUsesStmtList();
-
-  @Nullable
-  YangYangVersionStmt getYangVersionStmt();
+  YangSubmoduleHeaderStmts getSubmoduleHeaderStmts();
 
 }

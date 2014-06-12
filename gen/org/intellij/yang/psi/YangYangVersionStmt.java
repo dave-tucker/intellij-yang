@@ -8,9 +8,9 @@ import com.intellij.psi.PsiElement;
 public interface YangYangVersionStmt extends PsiElement {
 
   @NotNull
-  YangStmtend getStmtend();
+  YangAString getAString();
 
   @NotNull
-  YangStringStmt getStringStmt();
+  YangStmtend getStmtend();
 
 }

@@ -24,14 +24,14 @@ public class YangStatusStmtImpl extends ASTWrapperPsiElement implements YangStat
 
   @Override
   @NotNull
-  public YangStmtend getStmtend() {
-    return findNotNullChildByClass(YangStmtend.class);
+  public YangStatusArg getStatusArg() {
+    return findNotNullChildByClass(YangStatusArg.class);
   }
 
   @Override
   @NotNull
-  public YangStringStmt getStringStmt() {
-    return findNotNullChildByClass(YangStringStmt.class);
+  public YangStmtend getStmtend() {
+    return findNotNullChildByClass(YangStmtend.class);
   }
 
 }

@@ -8,6 +8,12 @@ import com.intellij.psi.PsiElement;
 public interface YangArgumentStmt extends PsiElement {
 
   @NotNull
-  List<YangStringStmt> getStringStmtList();
+  YangAString getAString();
+
+  @Nullable
+  YangUnknownStatement2 getUnknownStatement2();
+
+  @Nullable
+  YangYinElementStmt getYinElementStmt();
 
 }

@@ -7,4 +7,10 @@ import com.intellij.psi.PsiElement;
 
 public interface YangDeviateNotSupportedStmt extends PsiElement {
 
+  @NotNull
+  YangAString getAString();
+
+  @Nullable
+  YangIdentifierStmt getIdentifierStmt();
+
 }

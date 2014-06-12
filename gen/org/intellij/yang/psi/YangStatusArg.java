@@ -5,6 +5,6 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface YangStringStmt extends PsiElement {
+public interface YangStatusArg extends PsiElement {
 
 }

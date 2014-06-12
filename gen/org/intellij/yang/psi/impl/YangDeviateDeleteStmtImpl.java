@@ -23,9 +23,21 @@ public class YangDeviateDeleteStmtImpl extends ASTWrapperPsiElement implements Y
   }
 
   @Override
-  @Nullable
-  public YangDefaultStmt getDefaultStmt() {
-    return findChildByClass(YangDefaultStmt.class);
+  @NotNull
+  public YangAString getAString() {
+    return findNotNullChildByClass(YangAString.class);
+  }
+
+  @Override
+  @NotNull
+  public List<YangDefaultStmt> getDefaultStmtList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, YangDefaultStmt.class);
+  }
+
+  @Override
+  @NotNull
+  public List<YangIdentifierStmt> getIdentifierStmtList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, YangIdentifierStmt.class);
   }
 
   @Override
@@ -41,9 +53,9 @@ public class YangDeviateDeleteStmtImpl extends ASTWrapperPsiElement implements Y
   }
 
   @Override
-  @Nullable
-  public YangUnitsStmt getUnitsStmt() {
-    return findChildByClass(YangUnitsStmt.class);
+  @NotNull
+  public List<YangUnitsStmt> getUnitsStmtList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, YangUnitsStmt.class);
   }
 
 }

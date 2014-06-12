@@ -7,19 +7,22 @@ import com.intellij.psi.PsiElement;
 
 public interface YangEnumStmt extends PsiElement {
 
-  @Nullable
-  YangDescriptionStmt getDescriptionStmt();
-
-  @Nullable
-  YangReferenceStmt getReferenceStmt();
-
-  @Nullable
-  YangStatusStmt getStatusStmt();
+  @NotNull
+  YangAString getAString();
 
   @NotNull
-  YangStringStmt getStringStmt();
+  List<YangDescriptionStmt> getDescriptionStmtList();
 
-  @Nullable
-  YangValueStmt getValueStmt();
+  @NotNull
+  List<YangIdentifierStmt> getIdentifierStmtList();
+
+  @NotNull
+  List<YangReferenceStmt> getReferenceStmtList();
+
+  @NotNull
+  List<YangStatusStmt> getStatusStmtList();
+
+  @NotNull
+  List<YangValueStmt> getValueStmtList();
 
 }

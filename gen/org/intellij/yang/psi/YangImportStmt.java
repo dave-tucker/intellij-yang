@@ -8,12 +8,12 @@ import com.intellij.psi.PsiElement;
 public interface YangImportStmt extends PsiElement {
 
   @NotNull
+  YangAString getAString();
+
+  @NotNull
   YangPrefixStmt getPrefixStmt();
 
   @Nullable
   YangRevisionDateStmt getRevisionDateStmt();
-
-  @NotNull
-  YangStringStmt getStringStmt();
 
 }

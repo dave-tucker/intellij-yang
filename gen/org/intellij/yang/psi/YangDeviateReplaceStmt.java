@@ -7,25 +7,31 @@ import com.intellij.psi.PsiElement;
 
 public interface YangDeviateReplaceStmt extends PsiElement {
 
-  @Nullable
-  YangConfigStmt getConfigStmt();
+  @NotNull
+  YangAString getAString();
 
-  @Nullable
-  YangDefaultStmt getDefaultStmt();
+  @NotNull
+  List<YangConfigStmt> getConfigStmtList();
 
-  @Nullable
-  YangMandatoryStmt getMandatoryStmt();
+  @NotNull
+  List<YangDefaultStmt> getDefaultStmtList();
 
-  @Nullable
-  YangMaxElementsStmt getMaxElementsStmt();
+  @NotNull
+  List<YangIdentifierStmt> getIdentifierStmtList();
 
-  @Nullable
-  YangMinElementsStmt getMinElementsStmt();
+  @NotNull
+  List<YangMandatoryStmt> getMandatoryStmtList();
 
-  @Nullable
-  YangTypeStmt getTypeStmt();
+  @NotNull
+  List<YangMaxElementsStmt> getMaxElementsStmtList();
 
-  @Nullable
-  YangUnitsStmt getUnitsStmt();
+  @NotNull
+  List<YangMinElementsStmt> getMinElementsStmtList();
+
+  @NotNull
+  List<YangTypeStmt> getTypeStmtList();
+
+  @NotNull
+  List<YangUnitsStmt> getUnitsStmtList();
 
 }

@@ -8,30 +8,15 @@ import com.intellij.psi.PsiElement;
 public interface YangInputStmt extends PsiElement {
 
   @NotNull
-  List<YangAnyxmlStmt> getAnyxmlStmtList();
-
-  @NotNull
-  List<YangChoiceStmt> getChoiceStmtList();
-
-  @NotNull
-  List<YangContainerStmt> getContainerStmtList();
+  List<YangDataDefStmt> getDataDefStmtList();
 
   @NotNull
   List<YangGroupingStmt> getGroupingStmtList();
 
   @NotNull
-  List<YangLeafListStmt> getLeafListStmtList();
-
-  @NotNull
-  List<YangLeafStmt> getLeafStmtList();
-
-  @NotNull
-  List<YangListStmt> getListStmtList();
+  List<YangIdentifierStmt> getIdentifierStmtList();
 
   @NotNull
   List<YangTypedefStmt> getTypedefStmtList();
-
-  @NotNull
-  List<YangUsesStmt> getUsesStmtList();
 
 }

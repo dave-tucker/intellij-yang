@@ -23,6 +23,12 @@ public class YangRevisionStmtImpl extends ASTWrapperPsiElement implements YangRe
   }
 
   @Override
+  @NotNull
+  public YangAString getAString() {
+    return findNotNullChildByClass(YangAString.class);
+  }
+
+  @Override
   @Nullable
   public YangDescriptionStmt getDescriptionStmt() {
     return findChildByClass(YangDescriptionStmt.class);
@@ -32,12 +38,6 @@ public class YangRevisionStmtImpl extends ASTWrapperPsiElement implements YangRe
   @Nullable
   public YangReferenceStmt getReferenceStmt() {
     return findChildByClass(YangReferenceStmt.class);
-  }
-
-  @Override
-  @NotNull
-  public YangStringStmt getStringStmt() {
-    return findNotNullChildByClass(YangStringStmt.class);
   }
 
 }

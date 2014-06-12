@@ -8,45 +8,30 @@ import com.intellij.psi.PsiElement;
 public interface YangNotificationStmt extends PsiElement {
 
   @NotNull
-  List<YangAnyxmlStmt> getAnyxmlStmtList();
+  YangAString getAString();
 
   @NotNull
-  List<YangChoiceStmt> getChoiceStmtList();
+  List<YangDataDefStmt> getDataDefStmtList();
 
   @NotNull
-  List<YangContainerStmt> getContainerStmtList();
-
-  @Nullable
-  YangDescriptionStmt getDescriptionStmt();
+  List<YangDescriptionStmt> getDescriptionStmtList();
 
   @NotNull
   List<YangGroupingStmt> getGroupingStmtList();
 
   @NotNull
+  List<YangIdentifierStmt> getIdentifierStmtList();
+
+  @NotNull
   List<YangIfFeatureStmt> getIfFeatureStmtList();
 
   @NotNull
-  List<YangLeafListStmt> getLeafListStmtList();
+  List<YangReferenceStmt> getReferenceStmtList();
 
   @NotNull
-  List<YangLeafStmt> getLeafStmtList();
-
-  @NotNull
-  List<YangListStmt> getListStmtList();
-
-  @Nullable
-  YangReferenceStmt getReferenceStmt();
-
-  @Nullable
-  YangStatusStmt getStatusStmt();
-
-  @NotNull
-  YangStringStmt getStringStmt();
+  List<YangStatusStmt> getStatusStmtList();
 
   @NotNull
   List<YangTypedefStmt> getTypedefStmtList();
-
-  @NotNull
-  List<YangUsesStmt> getUsesStmtList();
 
 }

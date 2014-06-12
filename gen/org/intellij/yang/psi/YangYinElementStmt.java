@@ -11,6 +11,6 @@ public interface YangYinElementStmt extends PsiElement {
   YangStmtend getStmtend();
 
   @NotNull
-  YangStringStmt getStringStmt();
+  YangYinElementArg getYinElementArg();
 
 }

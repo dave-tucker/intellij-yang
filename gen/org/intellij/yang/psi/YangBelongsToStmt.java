@@ -8,9 +8,9 @@ import com.intellij.psi.PsiElement;
 public interface YangBelongsToStmt extends PsiElement {
 
   @NotNull
-  YangPrefixStmt getPrefixStmt();
+  YangAString getAString();
 
   @NotNull
-  YangStringStmt getStringStmt();
+  YangPrefixStmt getPrefixStmt();
 
 }

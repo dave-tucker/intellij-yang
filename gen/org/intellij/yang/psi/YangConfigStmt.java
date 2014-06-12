@@ -8,9 +8,9 @@ import com.intellij.psi.PsiElement;
 public interface YangConfigStmt extends PsiElement {
 
   @NotNull
-  YangStmtend getStmtend();
+  YangConfigArg getConfigArg();
 
   @NotNull
-  YangStringStmt getStringStmt();
+  YangStmtend getStmtend();
 
 }

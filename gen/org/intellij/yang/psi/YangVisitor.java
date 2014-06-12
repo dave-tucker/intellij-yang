@@ -7,6 +7,10 @@ import com.intellij.psi.PsiElement;
 
 public class YangVisitor extends PsiElementVisitor {
 
+  public void visitAString(@NotNull YangAString o) {
+    visitPsiElement(o);
+  }
+
   public void visitAnyxmlStmt(@NotNull YangAnyxmlStmt o) {
     visitPsiElement(o);
   }
@@ -31,6 +35,14 @@ public class YangVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
+  public void visitBitsSpecification(@NotNull YangBitsSpecification o) {
+    visitPsiElement(o);
+  }
+
+  public void visitBodyStmts(@NotNull YangBodyStmts o) {
+    visitPsiElement(o);
+  }
+
   public void visitCaseStmt(@NotNull YangCaseStmt o) {
     visitPsiElement(o);
   }
@@ -39,7 +51,7 @@ public class YangVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
-  public void visitCommentStmt(@NotNull YangCommentStmt o) {
+  public void visitConfigArg(@NotNull YangConfigArg o) {
     visitPsiElement(o);
   }
 
@@ -52,6 +64,14 @@ public class YangVisitor extends PsiElementVisitor {
   }
 
   public void visitContainerStmt(@NotNull YangContainerStmt o) {
+    visitPsiElement(o);
+  }
+
+  public void visitDataDefStmt(@NotNull YangDataDefStmt o) {
+    visitPsiElement(o);
+  }
+
+  public void visitDecimal64Specification(@NotNull YangDecimal64Specification o) {
     visitPsiElement(o);
   }
 
@@ -80,6 +100,10 @@ public class YangVisitor extends PsiElementVisitor {
   }
 
   public void visitDeviationStmt(@NotNull YangDeviationStmt o) {
+    visitPsiElement(o);
+  }
+
+  public void visitEnumSpecification(@NotNull YangEnumSpecification o) {
     visitPsiElement(o);
   }
 
@@ -119,6 +143,10 @@ public class YangVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
+  public void visitIdentityrefSpecification(@NotNull YangIdentityrefSpecification o) {
+    visitPsiElement(o);
+  }
+
   public void visitIfFeatureStmt(@NotNull YangIfFeatureStmt o) {
     visitPsiElement(o);
   }
@@ -135,6 +163,10 @@ public class YangVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
+  public void visitInstanceIdentifierSpecification(@NotNull YangInstanceIdentifierSpecification o) {
+    visitPsiElement(o);
+  }
+
   public void visitKeyStmt(@NotNull YangKeyStmt o) {
     visitPsiElement(o);
   }
@@ -147,11 +179,23 @@ public class YangVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
+  public void visitLeafrefSpecification(@NotNull YangLeafrefSpecification o) {
+    visitPsiElement(o);
+  }
+
   public void visitLengthStmt(@NotNull YangLengthStmt o) {
     visitPsiElement(o);
   }
 
+  public void visitLinkageStmts(@NotNull YangLinkageStmts o) {
+    visitPsiElement(o);
+  }
+
   public void visitListStmt(@NotNull YangListStmt o) {
+    visitPsiElement(o);
+  }
+
+  public void visitMandatoryArg(@NotNull YangMandatoryArg o) {
     visitPsiElement(o);
   }
 
@@ -163,7 +207,23 @@ public class YangVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
+  public void visitMaxValueArg(@NotNull YangMaxValueArg o) {
+    visitPsiElement(o);
+  }
+
+  public void visitMetaStmts(@NotNull YangMetaStmts o) {
+    visitPsiElement(o);
+  }
+
   public void visitMinElementsStmt(@NotNull YangMinElementsStmt o) {
+    visitPsiElement(o);
+  }
+
+  public void visitMinValueArg(@NotNull YangMinValueArg o) {
+    visitPsiElement(o);
+  }
+
+  public void visitModuleHeaderStmts(@NotNull YangModuleHeaderStmts o) {
     visitPsiElement(o);
   }
 
@@ -180,6 +240,14 @@ public class YangVisitor extends PsiElementVisitor {
   }
 
   public void visitNotificationStmt(@NotNull YangNotificationStmt o) {
+    visitPsiElement(o);
+  }
+
+  public void visitNumericalRestrictions(@NotNull YangNumericalRestrictions o) {
+    visitPsiElement(o);
+  }
+
+  public void visitOrderedByArg(@NotNull YangOrderedByArg o) {
     visitPsiElement(o);
   }
 
@@ -223,7 +291,43 @@ public class YangVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
+  public void visitRefineAnyxmlStmts(@NotNull YangRefineAnyxmlStmts o) {
+    visitPsiElement(o);
+  }
+
+  public void visitRefineCaseStmts(@NotNull YangRefineCaseStmts o) {
+    visitPsiElement(o);
+  }
+
+  public void visitRefineChoiceStmts(@NotNull YangRefineChoiceStmts o) {
+    visitPsiElement(o);
+  }
+
+  public void visitRefineContainerStmts(@NotNull YangRefineContainerStmts o) {
+    visitPsiElement(o);
+  }
+
+  public void visitRefineLeafListStmts(@NotNull YangRefineLeafListStmts o) {
+    visitPsiElement(o);
+  }
+
+  public void visitRefineLeafStmts(@NotNull YangRefineLeafStmts o) {
+    visitPsiElement(o);
+  }
+
+  public void visitRefineListStmts(@NotNull YangRefineListStmts o) {
+    visitPsiElement(o);
+  }
+
+  public void visitRefinePom(@NotNull YangRefinePom o) {
+    visitPsiElement(o);
+  }
+
   public void visitRefineStmt(@NotNull YangRefineStmt o) {
+    visitPsiElement(o);
+  }
+
+  public void visitRequireInstanceArg(@NotNull YangRequireInstanceArg o) {
     visitPsiElement(o);
   }
 
@@ -239,7 +343,19 @@ public class YangVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
+  public void visitRevisionStmts(@NotNull YangRevisionStmts o) {
+    visitPsiElement(o);
+  }
+
   public void visitRpcStmt(@NotNull YangRpcStmt o) {
+    visitPsiElement(o);
+  }
+
+  public void visitShortCaseStmt(@NotNull YangShortCaseStmt o) {
+    visitPsiElement(o);
+  }
+
+  public void visitStatusArg(@NotNull YangStatusArg o) {
     visitPsiElement(o);
   }
 
@@ -251,11 +367,19 @@ public class YangVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
-  public void visitStringStmt(@NotNull YangStringStmt o) {
+  public void visitStringRestrictions(@NotNull YangStringRestrictions o) {
+    visitPsiElement(o);
+  }
+
+  public void visitSubmoduleHeaderStmts(@NotNull YangSubmoduleHeaderStmts o) {
     visitPsiElement(o);
   }
 
   public void visitSubmoduleStmt(@NotNull YangSubmoduleStmt o) {
+    visitPsiElement(o);
+  }
+
+  public void visitTypeBodyStmts(@NotNull YangTypeBodyStmts o) {
     visitPsiElement(o);
   }
 
@@ -267,11 +391,27 @@ public class YangVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
+  public void visitUnionSpecification(@NotNull YangUnionSpecification o) {
+    visitPsiElement(o);
+  }
+
   public void visitUniqueStmt(@NotNull YangUniqueStmt o) {
     visitPsiElement(o);
   }
 
   public void visitUnitsStmt(@NotNull YangUnitsStmt o) {
+    visitPsiElement(o);
+  }
+
+  public void visitUnknownStatement(@NotNull YangUnknownStatement o) {
+    visitPsiElement(o);
+  }
+
+  public void visitUnknownStatement2(@NotNull YangUnknownStatement2 o) {
+    visitPsiElement(o);
+  }
+
+  public void visitUnknownStatement3(@NotNull YangUnknownStatement3 o) {
     visitPsiElement(o);
   }
 
@@ -292,6 +432,10 @@ public class YangVisitor extends PsiElementVisitor {
   }
 
   public void visitYangVersionStmt(@NotNull YangYangVersionStmt o) {
+    visitPsiElement(o);
+  }
+
+  public void visitYinElementArg(@NotNull YangYinElementArg o) {
     visitPsiElement(o);
   }
 

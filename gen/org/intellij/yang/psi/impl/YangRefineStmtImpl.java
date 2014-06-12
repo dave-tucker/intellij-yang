@@ -23,63 +23,15 @@ public class YangRefineStmtImpl extends ASTWrapperPsiElement implements YangRefi
   }
 
   @Override
-  @Nullable
-  public YangConfigStmt getConfigStmt() {
-    return findChildByClass(YangConfigStmt.class);
-  }
-
-  @Override
-  @Nullable
-  public YangDefaultStmt getDefaultStmt() {
-    return findChildByClass(YangDefaultStmt.class);
-  }
-
-  @Override
-  @Nullable
-  public YangDescriptionStmt getDescriptionStmt() {
-    return findChildByClass(YangDescriptionStmt.class);
-  }
-
-  @Override
-  @Nullable
-  public YangMandatoryStmt getMandatoryStmt() {
-    return findChildByClass(YangMandatoryStmt.class);
-  }
-
-  @Override
-  @Nullable
-  public YangMaxElementsStmt getMaxElementsStmt() {
-    return findChildByClass(YangMaxElementsStmt.class);
-  }
-
-  @Override
-  @Nullable
-  public YangMinElementsStmt getMinElementsStmt() {
-    return findChildByClass(YangMinElementsStmt.class);
-  }
-
-  @Override
   @NotNull
-  public List<YangMustStmt> getMustStmtList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, YangMustStmt.class);
+  public YangAString getAString() {
+    return findNotNullChildByClass(YangAString.class);
   }
 
   @Override
   @Nullable
-  public YangPresenceStmt getPresenceStmt() {
-    return findChildByClass(YangPresenceStmt.class);
-  }
-
-  @Override
-  @Nullable
-  public YangReferenceStmt getReferenceStmt() {
-    return findChildByClass(YangReferenceStmt.class);
-  }
-
-  @Override
-  @NotNull
-  public YangStringStmt getStringStmt() {
-    return findNotNullChildByClass(YangStringStmt.class);
+  public YangRefinePom getRefinePom() {
+    return findChildByClass(YangRefinePom.class);
   }
 
 }

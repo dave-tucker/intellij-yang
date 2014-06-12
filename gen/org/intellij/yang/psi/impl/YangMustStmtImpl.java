@@ -23,33 +23,39 @@ public class YangMustStmtImpl extends ASTWrapperPsiElement implements YangMustSt
   }
 
   @Override
-  @Nullable
-  public YangDescriptionStmt getDescriptionStmt() {
-    return findChildByClass(YangDescriptionStmt.class);
-  }
-
-  @Override
-  @Nullable
-  public YangErrorAppTagStmt getErrorAppTagStmt() {
-    return findChildByClass(YangErrorAppTagStmt.class);
-  }
-
-  @Override
-  @Nullable
-  public YangErrorMessageStmt getErrorMessageStmt() {
-    return findChildByClass(YangErrorMessageStmt.class);
-  }
-
-  @Override
-  @Nullable
-  public YangReferenceStmt getReferenceStmt() {
-    return findChildByClass(YangReferenceStmt.class);
+  @NotNull
+  public YangAString getAString() {
+    return findNotNullChildByClass(YangAString.class);
   }
 
   @Override
   @NotNull
-  public YangStringStmt getStringStmt() {
-    return findNotNullChildByClass(YangStringStmt.class);
+  public List<YangDescriptionStmt> getDescriptionStmtList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, YangDescriptionStmt.class);
+  }
+
+  @Override
+  @NotNull
+  public List<YangErrorAppTagStmt> getErrorAppTagStmtList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, YangErrorAppTagStmt.class);
+  }
+
+  @Override
+  @NotNull
+  public List<YangErrorMessageStmt> getErrorMessageStmtList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, YangErrorMessageStmt.class);
+  }
+
+  @Override
+  @NotNull
+  public List<YangIdentifierStmt> getIdentifierStmtList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, YangIdentifierStmt.class);
+  }
+
+  @Override
+  @NotNull
+  public List<YangReferenceStmt> getReferenceStmtList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, YangReferenceStmt.class);
   }
 
 }

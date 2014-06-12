@@ -22,4 +22,16 @@ public class YangDeviateNotSupportedStmtImpl extends ASTWrapperPsiElement implem
     else super.accept(visitor);
   }
 
+  @Override
+  @NotNull
+  public YangAString getAString() {
+    return findNotNullChildByClass(YangAString.class);
+  }
+
+  @Override
+  @Nullable
+  public YangIdentifierStmt getIdentifierStmt() {
+    return findChildByClass(YangIdentifierStmt.class);
+  }
+
 }

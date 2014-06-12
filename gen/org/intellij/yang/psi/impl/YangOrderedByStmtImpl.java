@@ -24,14 +24,14 @@ public class YangOrderedByStmtImpl extends ASTWrapperPsiElement implements YangO
 
   @Override
   @NotNull
-  public YangStmtend getStmtend() {
-    return findNotNullChildByClass(YangStmtend.class);
+  public YangOrderedByArg getOrderedByArg() {
+    return findNotNullChildByClass(YangOrderedByArg.class);
   }
 
   @Override
   @NotNull
-  public YangStringStmt getStringStmt() {
-    return findNotNullChildByClass(YangStringStmt.class);
+  public YangStmtend getStmtend() {
+    return findNotNullChildByClass(YangStmtend.class);
   }
 
 }

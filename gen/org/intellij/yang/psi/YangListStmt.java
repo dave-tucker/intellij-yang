@@ -8,69 +8,54 @@ import com.intellij.psi.PsiElement;
 public interface YangListStmt extends PsiElement {
 
   @NotNull
-  List<YangAnyxmlStmt> getAnyxmlStmtList();
+  YangAString getAString();
 
   @NotNull
-  List<YangChoiceStmt> getChoiceStmtList();
-
-  @Nullable
-  YangConfigStmt getConfigStmt();
+  List<YangConfigStmt> getConfigStmtList();
 
   @NotNull
-  List<YangContainerStmt> getContainerStmtList();
+  List<YangDataDefStmt> getDataDefStmtList();
 
-  @Nullable
-  YangDescriptionStmt getDescriptionStmt();
+  @NotNull
+  List<YangDescriptionStmt> getDescriptionStmtList();
 
   @NotNull
   List<YangGroupingStmt> getGroupingStmtList();
 
   @NotNull
+  List<YangIdentifierStmt> getIdentifierStmtList();
+
+  @NotNull
   List<YangIfFeatureStmt> getIfFeatureStmtList();
 
   @NotNull
-  List<YangLeafListStmt> getLeafListStmtList();
+  List<YangKeyStmt> getKeyStmtList();
 
   @NotNull
-  List<YangLeafStmt> getLeafStmtList();
+  List<YangMaxElementsStmt> getMaxElementsStmtList();
 
   @NotNull
-  List<YangListStmt> getListStmtList();
-
-  @Nullable
-  YangMaxElementsStmt getMaxElementsStmt();
-
-  @Nullable
-  YangMinElementsStmt getMinElementsStmt();
+  List<YangMinElementsStmt> getMinElementsStmtList();
 
   @NotNull
   List<YangMustStmt> getMustStmtList();
 
-  @Nullable
-  YangOrderedByStmt getOrderedByStmt();
-
-  @Nullable
-  YangReferenceStmt getReferenceStmt();
-
-  @Nullable
-  YangStatusStmt getStatusStmt();
+  @NotNull
+  List<YangOrderedByStmt> getOrderedByStmtList();
 
   @NotNull
-  YangStringStmt getStringStmt();
+  List<YangReferenceStmt> getReferenceStmtList();
 
   @NotNull
-  YangTypeStmt getTypeStmt();
+  List<YangStatusStmt> getStatusStmtList();
 
   @NotNull
   List<YangTypedefStmt> getTypedefStmtList();
 
-  @Nullable
-  YangUnitsStmt getUnitsStmt();
+  @NotNull
+  List<YangUniqueStmt> getUniqueStmtList();
 
   @NotNull
-  List<YangUsesStmt> getUsesStmtList();
-
-  @Nullable
-  YangWhenStmt getWhenStmt();
+  List<YangWhenStmt> getWhenStmtList();
 
 }

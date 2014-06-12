@@ -7,19 +7,22 @@ import com.intellij.psi.PsiElement;
 
 public interface YangPatternStmt extends PsiElement {
 
-  @Nullable
-  YangDescriptionStmt getDescriptionStmt();
-
-  @Nullable
-  YangErrorAppTagStmt getErrorAppTagStmt();
-
-  @Nullable
-  YangErrorMessageStmt getErrorMessageStmt();
-
-  @Nullable
-  YangReferenceStmt getReferenceStmt();
+  @NotNull
+  YangAString getAString();
 
   @NotNull
-  YangStringStmt getStringStmt();
+  List<YangDescriptionStmt> getDescriptionStmtList();
+
+  @NotNull
+  List<YangErrorAppTagStmt> getErrorAppTagStmtList();
+
+  @NotNull
+  List<YangErrorMessageStmt> getErrorMessageStmtList();
+
+  @NotNull
+  List<YangIdentifierStmt> getIdentifierStmtList();
+
+  @NotNull
+  List<YangReferenceStmt> getReferenceStmtList();
 
 }

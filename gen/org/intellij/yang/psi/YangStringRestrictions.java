@@ -5,6 +5,12 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface YangCommentStmt extends PsiElement {
+public interface YangStringRestrictions extends PsiElement {
+
+  @NotNull
+  List<YangLengthStmt> getLengthStmtList();
+
+  @NotNull
+  List<YangPatternStmt> getPatternStmtList();
 
 }

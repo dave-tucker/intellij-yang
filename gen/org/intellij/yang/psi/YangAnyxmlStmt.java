@@ -7,31 +7,34 @@ import com.intellij.psi.PsiElement;
 
 public interface YangAnyxmlStmt extends PsiElement {
 
-  @Nullable
-  YangConfigStmt getConfigStmt();
+  @NotNull
+  YangAString getAString();
 
-  @Nullable
-  YangDescriptionStmt getDescriptionStmt();
+  @NotNull
+  List<YangConfigStmt> getConfigStmtList();
+
+  @NotNull
+  List<YangDescriptionStmt> getDescriptionStmtList();
+
+  @NotNull
+  List<YangIdentifierStmt> getIdentifierStmtList();
 
   @NotNull
   List<YangIfFeatureStmt> getIfFeatureStmtList();
 
-  @Nullable
-  YangMandatoryStmt getMandatoryStmt();
+  @NotNull
+  List<YangMandatoryStmt> getMandatoryStmtList();
 
   @NotNull
   List<YangMustStmt> getMustStmtList();
 
-  @Nullable
-  YangReferenceStmt getReferenceStmt();
-
-  @Nullable
-  YangStatusStmt getStatusStmt();
+  @NotNull
+  List<YangReferenceStmt> getReferenceStmtList();
 
   @NotNull
-  YangStringStmt getStringStmt();
+  List<YangStatusStmt> getStatusStmtList();
 
-  @Nullable
-  YangWhenStmt getWhenStmt();
+  @NotNull
+  List<YangWhenStmt> getWhenStmtList();
 
 }

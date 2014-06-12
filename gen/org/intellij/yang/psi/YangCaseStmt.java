@@ -8,42 +8,27 @@ import com.intellij.psi.PsiElement;
 public interface YangCaseStmt extends PsiElement {
 
   @NotNull
-  List<YangAnyxmlStmt> getAnyxmlStmtList();
+  YangAString getAString();
 
   @NotNull
-  List<YangChoiceStmt> getChoiceStmtList();
+  List<YangDataDefStmt> getDataDefStmtList();
 
   @NotNull
-  List<YangContainerStmt> getContainerStmtList();
+  List<YangDescriptionStmt> getDescriptionStmtList();
 
-  @Nullable
-  YangDescriptionStmt getDescriptionStmt();
+  @NotNull
+  List<YangIdentifierStmt> getIdentifierStmtList();
 
   @NotNull
   List<YangIfFeatureStmt> getIfFeatureStmtList();
 
   @NotNull
-  List<YangLeafListStmt> getLeafListStmtList();
+  List<YangReferenceStmt> getReferenceStmtList();
 
   @NotNull
-  List<YangLeafStmt> getLeafStmtList();
+  List<YangStatusStmt> getStatusStmtList();
 
   @NotNull
-  List<YangListStmt> getListStmtList();
-
-  @Nullable
-  YangReferenceStmt getReferenceStmt();
-
-  @Nullable
-  YangStatusStmt getStatusStmt();
-
-  @NotNull
-  YangStringStmt getStringStmt();
-
-  @NotNull
-  List<YangUsesStmt> getUsesStmtList();
-
-  @Nullable
-  YangWhenStmt getWhenStmt();
+  List<YangWhenStmt> getWhenStmtList();
 
 }

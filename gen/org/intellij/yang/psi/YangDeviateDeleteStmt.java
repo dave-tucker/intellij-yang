@@ -7,8 +7,14 @@ import com.intellij.psi.PsiElement;
 
 public interface YangDeviateDeleteStmt extends PsiElement {
 
-  @Nullable
-  YangDefaultStmt getDefaultStmt();
+  @NotNull
+  YangAString getAString();
+
+  @NotNull
+  List<YangDefaultStmt> getDefaultStmtList();
+
+  @NotNull
+  List<YangIdentifierStmt> getIdentifierStmtList();
 
   @NotNull
   List<YangMustStmt> getMustStmtList();
@@ -16,7 +22,7 @@ public interface YangDeviateDeleteStmt extends PsiElement {
   @NotNull
   List<YangUniqueStmt> getUniqueStmtList();
 
-  @Nullable
-  YangUnitsStmt getUnitsStmt();
+  @NotNull
+  List<YangUnitsStmt> getUnitsStmtList();
 
 }

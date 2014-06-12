@@ -7,20 +7,26 @@ import com.intellij.psi.PsiElement;
 
 public interface YangDeviateAddStmt extends PsiElement {
 
-  @Nullable
-  YangConfigStmt getConfigStmt();
+  @NotNull
+  YangAString getAString();
 
-  @Nullable
-  YangDefaultStmt getDefaultStmt();
+  @NotNull
+  List<YangConfigStmt> getConfigStmtList();
 
-  @Nullable
-  YangMandatoryStmt getMandatoryStmt();
+  @NotNull
+  List<YangDefaultStmt> getDefaultStmtList();
 
-  @Nullable
-  YangMaxElementsStmt getMaxElementsStmt();
+  @NotNull
+  List<YangIdentifierStmt> getIdentifierStmtList();
 
-  @Nullable
-  YangMinElementsStmt getMinElementsStmt();
+  @NotNull
+  List<YangMandatoryStmt> getMandatoryStmtList();
+
+  @NotNull
+  List<YangMaxElementsStmt> getMaxElementsStmtList();
+
+  @NotNull
+  List<YangMinElementsStmt> getMinElementsStmtList();
 
   @NotNull
   List<YangMustStmt> getMustStmtList();
@@ -28,7 +34,7 @@ public interface YangDeviateAddStmt extends PsiElement {
   @NotNull
   List<YangUniqueStmt> getUniqueStmtList();
 
-  @Nullable
-  YangUnitsStmt getUnitsStmt();
+  @NotNull
+  List<YangUnitsStmt> getUnitsStmtList();
 
 }

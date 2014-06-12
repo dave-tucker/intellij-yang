@@ -30,8 +30,8 @@ public class YangYinElementStmtImpl extends ASTWrapperPsiElement implements Yang
 
   @Override
   @NotNull
-  public YangStringStmt getStringStmt() {
-    return findNotNullChildByClass(YangStringStmt.class);
+  public YangYinElementArg getYinElementArg() {
+    return findNotNullChildByClass(YangYinElementArg.class);
   }
 
 }
