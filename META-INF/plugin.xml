@@ -26,6 +26,7 @@
       <fileTypeFactory implementation="org.intellij.yang.YangFileTypeFactory"/>
       <lang.parserDefinition language="Yang" implementationClass="org.intellij.yang.YangParserDefinition"/>
       <lang.syntaxHighlighterFactory key="Yang" implementationClass="org.intellij.yang.YangSyntaxHighlighterFactory"/>
+      <completion.contributor language="Yang" implementationClass="org.intellij.yang.YangCompletionContributor"/>
   </extensions>
 
   <application-components>
