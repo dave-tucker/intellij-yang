@@ -1,3 +1,19 @@
+/*
+ * Copyright 2014 Red Hat, Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package com.intellij.lang.yang;
 
 import com.intellij.openapi.editor.colors.TextAttributesKey;
@@ -21,7 +37,7 @@ public class YangColorSettingsPage implements ColorSettingsPage {
             new AttributesDescriptor("Braces", YangSyntaxHighlighter.BRACES),
             new AttributesDescriptor("Operator", YangSyntaxHighlighter.OP_SIGN),
             new AttributesDescriptor("Semicolon", YangSyntaxHighlighter.SEMICOLON),
-            new AttributesDescriptor("Unknown", YangSyntaxHighlighter.UNKNOWN)
+            new AttributesDescriptor("Unknown Statement", YangSyntaxHighlighter.UNKNOWN)
     };
 
     @Nullable
@@ -43,6 +59,10 @@ public class YangColorSettingsPage implements ColorSettingsPage {
                "  namespace \"http://acme.example.com/foo\";\n" +
                "  prefix \"acfoo\";\n" +
                "\n" +
+               "import my-extensions {\n" +
+               "  prefix \"myext\";\n" +
+               "}" +
+               "\n" +
                "  list interface {\n" +
                "    key \"name\";\n" +
                "    leaf name {\n" +
@@ -55,6 +75,7 @@ public class YangColorSettingsPage implements ColorSettingsPage {
                "  leaf mtu {\n" +
                "    type uint32;\n" +
                "    description \"The MTU of the interface.\";\n" +
+               "    myext:c-define \"MY-MTU\";" +
                "  }\n" +
                "\n" +
                "// This isn't supposed to be here \n" +
