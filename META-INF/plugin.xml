@@ -23,11 +23,11 @@
   -->
 
   <extensions defaultExtensionNs="com.intellij">
-      <fileTypeFactory implementation="org.intellij.yang.YangFileTypeFactory"/>
-      <lang.parserDefinition language="Yang" implementationClass="org.intellij.yang.YangParserDefinition"/>
-      <lang.syntaxHighlighterFactory key="Yang" implementationClass="org.intellij.yang.YangSyntaxHighlighterFactory"/>
-      <colorSettingsPage implementation="org.intellij.yang.YangColorSettingsPage"/>
-      <completion.contributor language="Yang" implementationClass="org.intellij.yang.YangCompletionContributor"/>
+      <fileTypeFactory implementation="com.intellij.lang.yang.YangFileTypeFactory"/>
+      <lang.parserDefinition language="Yang" implementationClass="com.intellij.lang.yang.YangParserDefinition"/>
+      <lang.syntaxHighlighterFactory key="Yang" implementationClass="com.intellij.lang.yang.YangSyntaxHighlighterFactory"/>
+      <colorSettingsPage implementation="com.intellij.lang.yang.YangColorSettingsPage"/>
+      <completion.contributor language="Yang" implementationClass="com.intellij.lang.yang.YangCompletionContributor"/>
   </extensions>
 
   <application-components>
