@@ -14,8 +14,9 @@
  * limitations under the License.
  */
 
-package com.intellij.lang.yang;
+package com.intellij.lang.yang.editor;
 
+import com.intellij.lang.yang.YangParserDefinition;
 import com.intellij.lexer.Lexer;
 import com.intellij.openapi.editor.DefaultLanguageHighlighterColors;
 import com.intellij.openapi.editor.colors.TextAttributesKey;

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.intellij.lang.yang;
+package com.intellij.lang.yang.editor;
 
 import com.intellij.openapi.editor.colors.TextAttributesKey;
 import com.intellij.openapi.fileTypes.SyntaxHighlighter;

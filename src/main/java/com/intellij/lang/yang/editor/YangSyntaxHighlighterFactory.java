@@ -14,8 +14,9 @@
  * limitations under the License.
  */
 
-package com.intellij.lang.yang;
+package com.intellij.lang.yang.editor;
 
+import com.intellij.lang.yang.editor.YangSyntaxHighlighter;
 import com.intellij.openapi.fileTypes.SyntaxHighlighter;
 import com.intellij.openapi.fileTypes.SyntaxHighlighterFactory;
 import com.intellij.openapi.project.Project;
