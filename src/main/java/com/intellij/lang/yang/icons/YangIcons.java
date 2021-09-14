@@ -16,10 +16,11 @@
 
 package com.intellij.lang.yang.icons;
 
+
 import com.intellij.openapi.util.IconLoader;
 import javax.swing.*;
 
 public class YangIcons {
-    public static final Icon FILE = IconLoader.getIcon("/icons/yang-16x16.png");
+    public static final Icon FILE = IconLoader.getIcon("/icons/yang-16x16.png", YangIcons.class);
 }
 

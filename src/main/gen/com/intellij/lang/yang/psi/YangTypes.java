@@ -22,7 +22,7 @@ import com.intellij.psi.PsiElement;
 import com.intellij.lang.ASTNode;
 import com.intellij.lang.psi.impl.*;
 
-public interface YangTypes {
+public interface YangTypes  {
 
   IElementType YANG_ANYXML_STMT = new YangElementType("YANG_ANYXML_STMT");
   IElementType YANG_ARGUMENT_STMT = new YangElementType("YANG_ARGUMENT_STMT");

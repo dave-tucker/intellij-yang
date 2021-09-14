@@ -1,0 +1,67 @@
+<!--
+  ~ Copyright 2014 Red Hat, Inc.
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<idea-plugin version="2">
+    <id>org.intellij.yang</id>
+    <name>Yang Language Plugin</name>
+    <version>1.0</version>
+    <vendor email="dave@dtucker.co.uk" url="http://dtucker.co.uk">Dave Tucker</vendor>
+
+    <description><![CDATA[
+      This plugin adds support for Yang to IntelliJ
+    ]]></description>
+
+    <change-notes><![CDATA[
+      Nothing to report
+    ]]>
+    </change-notes>
+
+    <!-- please see http://confluence.jetbrains.com/display/IDEADEV/Build+Number+Ranges for description -->
+    <idea-version since-build="131"/>
+
+    <!-- please see http://confluence.jetbrains.com/display/IDEADEV/Plugin+Compatibility+with+IntelliJ+Platform+Products
+         on how to target different products -->
+    <!-- uncomment to enable plugin in all products
+    <depends>com.intellij.modules.lang</depends>
+    -->
+
+    <extensions defaultExtensionNs="com.intellij">
+        <fileTypeFactory implementation="com.intellij.lang.yang.YangFileTypeFactory"/>
+        <lang.parserDefinition language="Yang" implementationClass="com.intellij.lang.yang.YangParserDefinition"/>
+        <lang.syntaxHighlighterFactory key="Yang" implementationClass="com.intellij.lang.yang.editor.YangSyntaxHighlighterFactory"/>
+        <colorSettingsPage implementation="com.intellij.lang.yang.editor.YangColorSettingsPage"/>
+        <completion.contributor language="Yang" implementationClass="com.intellij.lang.yang.YangCompletionContributor"/>
+        <lang.foldingBuilder language="Yang"
+                             implementationClass="com.intellij.lang.yang.foldingManager.YangCurlyBracketsFoldingManager"/>
+        <lang.foldingBuilder language="Yang"
+                             implementationClass="com.intellij.lang.yang.foldingManager.YangDescriptionFoldingManager"/>
+    </extensions>
+
+    <application-components>
+        <!-- Add your application components here -->
+    </application-components>
+
+    <project-components>
+        <!-- Add your project components here -->
+    </project-components>
+
+    <actions>
+        <!-- Add your actions here -->
+    </actions>
+
+    <depends>com.intellij.modules.java</depends>
+
+</idea-plugin>
