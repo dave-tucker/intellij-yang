@@ -45,3 +45,5 @@ out
 .idea
 .gradle
 build
+gradlew
+gradlew.bat
