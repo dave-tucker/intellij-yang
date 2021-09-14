@@ -29,6 +29,6 @@ public class YangFoldingManagerUtil {
                  does not exist but his body in root still does*/
                 new FoldingDescriptor(root.getNode(),
                         new TextRange(startOffset,
-                                element.getTextRange().getEndOffset() - 1)));
+                                element.getTextRange().getEndOffset())));
     }
 }

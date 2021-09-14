@@ -46,7 +46,7 @@ public class YangDescriptionFoldingManager extends FoldingBuilderEx implements D
     @Override
     public @Nullable
     String getPlaceholderText(@NotNull final ASTNode astNode) {
-        return "\"...\"";
+        return "\"...\";";
     }
 
     @Override
