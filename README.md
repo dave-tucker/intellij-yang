@@ -3,6 +3,8 @@ intellij-yang
 
 This IntelliJ Plugin adds support for Yang.
 
+> NOTE: THIS REPOSITORY IS NO LONGER MAINTAINED
+
 # Features
 
 - Syntax Highlighting
